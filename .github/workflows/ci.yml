@@ -1,0 +1,39 @@
+# CI da staging: prova que o site compila antes de ele poder ir para a main.
+# Não publica nada e não usa secret nenhum. Quem publica é o deploy.yml, na main.
+name: CI
+
+on:
+  push:
+    branches: [staging]
+
+# Só leitura: o CI precisa baixar o código, nada além disso.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Nenhum passo seguinte precisa falar com o GitHub, então o token
+      # não fica gravado no git config do runner.
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Mesma versão maior do Dockerfile (node:24-slim): o CI constrói
+      # com o mesmo Node que produção.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Instala exatamente o package-lock.json e falha se ele divergir
+      # do package.json.
+      - run: npm ci
+
+      # Tipos e diagnósticos do Astro. Vem antes do build porque é mais
+      # rápido e aponta o erro com mensagem mais clara.
+      - run: npm run check
+
+      # O teste mais importante: com as content collections, é aqui que
+      # o frontmatter de cada arquivo é validado.
+      - run: npm run build
