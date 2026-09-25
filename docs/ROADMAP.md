@@ -11,11 +11,11 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.** O painel de
 escrita não precisa — publicar por commit funciona.
 
-## 📍 Status atual (24/09/2026)
+## 📍 Status atual (25/09/2026)
 
 | Fase | Status |
 |---|---|
-| 1 · Fundação e deploy | 🔄 Em andamento — documentação escrita |
+| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar; faltam content collections, tokens e CI |
 | 2 · Páginas e conteúdo | ⏳ Planejada |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
@@ -31,22 +31,23 @@ escrita não precisa — publicar por commit funciona.
 - [x] Levantar requisitos e registrar decisões iniciais no `docs/DECISIONS.md`.
 - [x] Documentação base: `README`, `AGENTS`, `ROADMAP`, `PAGES`, `DECISIONS`, `DESIGN_TOKENS`,
       `docs/CONTEUDO.md`.
-- [ ] Criar o repositório público `jvm-systems` no GitHub, com as branches `main` e `staging`.
+- [x] Criar o repositório público `jvm-systems` no GitHub, com as branches `main` e `staging`.
 - [x] Protótipo em `prototipos/vitrine-v4.html` — a v3 sem o que não existe (serviços, domínios,
       contagens e hospedagem inventados) e com textos simplificados. A v3 não entra no repositório.
-- [ ] **Verificar a versão atual do Astro e da integração MDX antes do scaffold** (regra 10 do
-      `AGENTS.md`). Fixar versões no `package.json`.
-- [ ] Scaffold do Astro com MDX e TypeScript.
+- [x] **Verificar a versão atual do Astro e da integração MDX antes do scaffold** (regra 10 do
+      `AGENTS.md`). Fixadas sem `^`: Astro 7.3.5, `@astrojs/mdx` 8.0.2, TypeScript 6.0.3. (#1)
+- [x] Scaffold do Astro com MDX e TypeScript. (#1)
 - [ ] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`.
 - [ ] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.
 - [ ] CI no push para `staging`: `astro check` + `npm run build`.
-- [ ] `Dockerfile` em duas etapas: Node gera o `dist/`, e um Caddy interno serve na porta 8080.
-- [ ] Serviço `jvm-systems` no `docker-compose.yml` do `~/infra`, com `expose` (nunca `ports`).
-- [ ] Bloco `joaomendes.dev.br` no Caddyfile do `~/infra` + `docker compose restart caddy`.
-- [ ] `.github/workflows/deploy.yml` no mesmo molde do AniDeck e do Grimoire, com os secrets
-      `VPS_HOST`, `VPS_USER` e `VPS_SSH_KEY`.
-- [ ] `.dockerignore` desde o primeiro commit — pendência que os outros dois projetos ainda têm.
-- [ ] Esqueleto respondendo em `https://joaomendes.dev.br` com certificado válido.
+- [x] `Dockerfile` em duas etapas: Node gera o `dist/`, e um Caddy interno serve na porta 8080. (#2)
+- [x] Serviço `jvm-systems` no `docker-compose.yml` do `~/infra`, com `expose` (nunca `ports`). (#2)
+- [x] Bloco `joaomendes.dev.br` no Caddyfile do `~/infra`, aplicado com `caddy reload` — sem
+      derrubar os outros sites. (#2)
+- [x] `.github/workflows/deploy.yml` no mesmo molde do AniDeck e do Grimoire, com os secrets
+      `VPS_HOST`, `VPS_USER` e `VPS_SSH_KEY`. (#2)
+- [x] `.dockerignore` desde o primeiro commit — pendência que os outros dois projetos ainda têm. (#2)
+- [x] Esqueleto respondendo em `https://joaomendes.dev.br` com certificado válido. (#2)
 
 ## 📄 Fase 2: Páginas e conteúdo
 
