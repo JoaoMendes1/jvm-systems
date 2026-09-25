@@ -1,0 +1,17 @@
+# dependências: reinstaladas com npm install, nunca versionadas
+node_modules/
+
+# saída do build: gerada a cada npm run build
+dist/
+
+# arquivos que o Astro gera sozinho
+.astro/
+
+# variáveis de ambiente, se um dia existirem
+.env
+.env.*
+
+# sistema e editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
