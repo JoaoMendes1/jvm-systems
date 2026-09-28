@@ -150,6 +150,10 @@ quando houver issue. Pílula e estudo de caso novos usam `docs(pilulas)` e `docs
    nunca empilhada no final. O roadmap também deve marcar claramente **onde está o MVP**
    (o corte mínimo publicável) e diferenciar isso de melhorias posteriores.
 
+   **A cada entrega, atualizar o roadmap no mesmo push:** marcar os itens concluídos com `[x]`
+   (e o número da issue, quando houver) e ajustar a tabela "Status atual". Se a entrega
+   implementou uma página, atualizar também o `docs/PAGES.md` (status e coluna `Arquivo`).
+
 6.1. **Um `docs/PAGES.md` complementa o roadmap**, rastreando status por página/tela em vez de por
    fase — colunas: nome da página, status (⏳ só planejada / ⏳ só preview / ✅ prototipada /
    implementada), e a fase do roadmap correspondente. Atualizar sempre que uma tela ganhar
@@ -157,10 +161,10 @@ quando houver issue. Pílula e estudo de caso novos usam `docs(pilulas)` e `docs
    (ex: Configurações + Ajuda numa só) em vez de multiplicar páginas por padrão.
 
 7. **CI automatizado no push para `staging`.** Um workflow do GitHub Actions roda `astro check`
-     e `npm run build` a cada push nessa branch. O build
-   é o teste mais importante deste projeto: é nele que o schema do conteúdo é validado, então
-   frontmatter errado quebra o CI em vez de chegar ao site. Se quebrar, corrige antes de promover
-   para `main`. Configura uma vez, roda sozinho depois.
+   e `npm run build` a cada push nessa branch. O build é o teste mais importante deste projeto:
+   é nele que o schema do conteúdo é validado, então frontmatter errado quebra o CI em vez de
+   chegar ao site. Se quebrar, corrige antes de promover para `main`. Configura uma vez, roda
+   sozinho depois.
 
 8. **Decisões técnicas estruturais vão para `docs/DECISIONS.md`** (não no
    `docs/ROADMAP.md`, para não duplicar). Formato de cada entrada:

@@ -11,12 +11,12 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.** O painel de
 escrita não precisa — publicar por commit funciona.
 
-## 📍 Status atual (27/09/2026)
+## 📍 Status atual (28/09/2026)
 
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | ⏳ Planejada |
+| 2 · Páginas e conteúdo | 🚧 Em andamento — Home no ar |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
@@ -51,8 +51,8 @@ escrita não precisa — publicar por commit funciona.
 
 ## 📄 Fase 2: Páginas e conteúdo
 
-- [ ] **Home:** hero, quadro "rodando agora", grade de projetos e chamada de contato — quadro e
-      grade gerados a partir de `src/content/projetos/`.
+- [x] **Home:** hero, quadro "rodando agora", grade de projetos e chamada de contato — quadro e
+      grade gerados a partir de `src/content/projetos/`. (#5)
 - [ ] **Estudo de caso:** rota `/projetos/[slug]`, com sumário gerado a partir dos títulos.
 - [ ] Componentes MDX do estudo de caso: `Decisao`, `Terminal` e `Callout`.
 - [ ] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
@@ -65,10 +65,11 @@ escrita não precisa — publicar por commit funciona.
       ("O free tier hiberna, e o seu estado em memória some junto", já escrita no protótipo).
 - [ ] **Preencher o que a v4 do protótipo deixou em aberto de propósito.** Conferir antes de dar
       a fase por encerrada:
-  - [ ] contagens do hero (serviços no ar, pílulas) → calculadas no build a partir das coleções;
+  - [x] contagens do hero (serviços no ar, pílulas) → calculadas no build a partir das coleções;
+        stat com valor zero não aparece; (#5)
   - [ ] data de entrada em produção do AniDeck → campo `desde` do arquivo do projeto;
   - [ ] trecho de código do Kill Switch → copiado do `cmd/web/main.go` real;
-  - [ ] endereço de e-mail e link do LinkedIn → hoje marcadores (`EMAIL_DE_CONTATO`, `#LINKEDIN`);
+  - [x] endereço de e-mail e link do LinkedIn → no componente `Contato`; (#5)
   - [ ] texto do estudo de caso → cada afirmação técnica conferida contra o repositório do
         AniDeck;
   - [ ] todo texto do site revisado pela seção "Tom e posicionamento" do `docs/CONTEUDO.md`.
