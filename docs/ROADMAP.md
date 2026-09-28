@@ -16,7 +16,7 @@ escrita não precisa — publicar por commit funciona.
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | 🚧 Em andamento — Home no ar |
+| 2 · Páginas e conteúdo | 🚧 Em andamento — Home e Sobre no ar |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
@@ -57,7 +57,7 @@ escrita não precisa — publicar por commit funciona.
 - [ ] Componentes MDX do estudo de caso: `Decisao`, `Terminal` e `Callout`.
 - [ ] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
       `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa.
-- [ ] **Sobre:** trajetória e ferramental.
+- [x] **Sobre:** trajetória e ferramental, com a barra de navegação. (#6)
 - [ ] **Privacidade:** `/privacidade`. Cobre o site (sem cookies, sem analytics) e o app OAuth do
       Google usado pelo backup, que hoje aponta a política para o Grimoire.
 - [ ] Página 404.

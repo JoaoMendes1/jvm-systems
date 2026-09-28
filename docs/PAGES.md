@@ -4,7 +4,7 @@
 | 2 | Estudo de caso | `/projetos/[slug]` | — | ✅ Prototipada (só AniDeck) | Fase 2 |
 | 3 | Pílulas (lista) | `/pilulas` | — | ✅ Prototipada | Fase 2 |
 | 4 | Pílula | `/pilulas/[slug]` | — | ✅ Prototipada | Fase 2 |
-| 5 | Sobre | `/sobre` | — | ✅ Prototipada | Fase 2 |
+| 5 | Sobre | `/sobre` | `src/pages/sobre.astro` | ✅ Implementada | Fase 2 |
 | 6 | Privacidade | `/privacidade` | — | ⏳ Só planejada | Fase 2 |
 | 7 | Página não encontrada | 404 | — | ⏳ Só planejada | Fase 2 |
 | 8 | Painel de escrita | fora do site | — | ✅ Prototipada · pós-MVP | Fase 4 |

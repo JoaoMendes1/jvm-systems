@@ -1,0 +1,118 @@
+---
+// Sobre: trajetória e ferramental. Afirmações confirmadas pelo autor em
+// 28/09/2026; mudar só com o fato na mão (docs/CONTEUDO.md, "Tom e posicionamento").
+import Base from '../layouts/Base.astro';
+import Contato from '../components/Contato.astro';
+
+// Tabelas geradas destes dados, sem HTML repetido. Os períodos são texto
+// fixo, não datas do frontmatter: não passam pela armadilha do fuso.
+const TRAJETORIA = [
+  {
+    periodo: 'dez 2025 — hoje',
+    cargo: 'Analista de suporte',
+    empresa: 'BRD Soluções (cliente Detran SC)',
+    descricao: 'Gestão de acesso em sistemas estaduais: análise e concessão de permissão, desbloqueio e segurança de perfil.',
+  },
+  {
+    periodo: 'jul 2023 — nov 2025',
+    cargo: 'Técnico de suporte',
+    empresa: 'Stefanini (cliente Oncoclínicas)',
+    descricao: 'N1 e N2 em sistemas e acesso, perfil no ERP e AD, rede corporativa, VPN e MFA, sob SLA.',
+  },
+  {
+    periodo: 'out 2019 — jul 2021',
+    cargo: 'Estagiário de TI',
+    empresa: 'Polícia Federal',
+    descricao: 'Active Directory e File Server com autonomia de permissão, VPN e controle de acesso físico.',
+  },
+];
+
+const FERRAMENTAL = [
+  { area: 'nos projetos', itens: 'Go · chi · TypeScript · React · JavaScript · PostgreSQL (Supabase)' },
+  { area: 'infraestrutura', itens: 'Linux · Docker · Caddy · GitHub Actions · VPS' },
+  { area: 'estudando', itens: 'Node · MySQL' },
+];
+---
+<Base
+  title="Sobre — João Victor Mendes"
+  description="Cinco anos em suporte e gestão de acesso, e como eu construo e mantenho meus projetos."
+>
+  <p class="eyebrow">quem escreve isso</p>
+  <h1 class="titulo">João Victor<br /><span class="ital grad">Mendes</span></h1>
+  <p class="lede abertura">
+    Bacharel em Sistemas de Informação, com cinco anos de experiência em suporte e gestão de
+    acesso. Programo há bastante tempo, mas sem constância; agora estou me dedicando de verdade, e
+    este site reúne o que construí nessa fase.
+  </p>
+
+  <section class="bloco">
+    <h2>O que o suporte me ensinou</h2>
+    <p class="prosa">
+      Gestão de acesso é, no fundo, autorização: quem pode fazer o quê, e em que condição. Quando
+      precisei proteger os dados de cada usuário no AniDeck com RLS no Postgres, a ideia já era
+      conhecida — o que mudou foi a sintaxe. O suporte também me ensinou a desconfiar do problema
+      que ninguém vê. Por isso, nos meus projetos, <strong>o serviço se recusa a iniciar se falta
+      alguma configuração</strong>, em vez de subir pela metade.
+    </p>
+  </section>
+
+  <section class="bloco">
+    <h2>Como eu trabalho</h2>
+    <p class="prosa">
+      Construo com ajuda de IA, e digo isso abertamente. Antes de aceitar uma sugestão, peço o
+      porquê, e registro as decisões importantes no próprio repositório, junto com a alternativa
+      que descartei. O objetivo é conseguir explicar cada escolha que está no código.
+    </p>
+  </section>
+
+  <section class="bloco">
+    <h2>Trajetória</h2>
+    <table class="tabela">
+      <tbody>
+        {TRAJETORIA.map((t) => (
+          <tr>
+            <th scope="row">{t.periodo}</th>
+            <td><b>{t.cargo}</b> · {t.empresa}<br />{t.descricao}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bloco">
+    <h2>Ferramental</h2>
+    <table class="tabela">
+      <tbody>
+        {FERRAMENTAL.map((f) => (
+          <tr>
+            <th scope="row">{f.area}</th>
+            <td>{f.itens}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <Contato />
+</Base>
+
+<style>
+  .titulo { font-size: clamp(36px, 6.4vw, 58px); }
+  .abertura { margin-top: 22px; }
+  .bloco { padding-top: 60px; }
+  .prosa { max-width: 64ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
+  .prosa strong { color: var(--fg); font-weight: 500; }
+
+  .tabela { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-top: 12px; }
+  .tabela th, .tabela td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tabela th { width: 26%; font-family: var(--mono); font-size: 10.5px; color: var(--fg3); letter-spacing: .07em; font-weight: 400; }
+  .tabela td { color: var(--fg2); }
+  .tabela b { color: var(--fg); font-weight: 500; }
+
+  /* No celular, período em cima e descrição embaixo, em vez de duas colunas apertadas. */
+  @media (max-width: 620px) {
+    .tabela tr { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .tabela th, .tabela td { display: block; width: auto; padding: 0; border: 0; }
+    .tabela th { margin-bottom: 6px; }
+  }
+</style>

@@ -1,8 +1,9 @@
 /* Estilo base de todas as páginas. O resto fica em cada componente. */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* Tema único, escuro: barras de rolagem e campos nativos seguem o tema. */
-html { color-scheme: dark; }
+/* Tema único, escuro: barras de rolagem e campos nativos seguem o tema.
+   O scroll-padding faz o link para âncora (#projetos) parar abaixo da barra fixa. */
+html { color-scheme: dark; scroll-padding-top: 88px; }
 
 body {
   margin: 0;

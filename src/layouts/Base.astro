@@ -4,6 +4,7 @@
 import { Font } from 'astro:assets';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import Nav from '../components/Nav.astro';
 
 interface Props {
   title: string;
@@ -29,6 +30,7 @@ const { title, description } = Astro.props;
     <!-- Atmosfera: decoração fixa atrás do conteúdo, escondida do leitor de tela. -->
     <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="vig" aria-hidden="true"></div>
+        <Nav />
     <main class="wrap">
       <slot />
     </main>
@@ -40,8 +42,8 @@ const { title, description } = Astro.props;
 
 <style>
   /* Largura máxima e margem do conteúdo de todas as páginas. */
-  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 96px 24px 40px; }
-  @media (max-width: 620px) { .wrap { padding: 64px 16px 32px; } }
+  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 136px 24px 40px; }
+  @media (max-width: 620px) { .wrap { padding: 104px 16px 32px; } }
 
   /* Manchas de cor desfocadas no fundo. Decoração, sem informação. */
   .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }

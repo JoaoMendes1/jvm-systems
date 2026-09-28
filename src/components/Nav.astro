@@ -1,0 +1,49 @@
+---
+// Barra de navegação fixa de todas as páginas. Só entra aqui página que
+// existe: link para rota inexistente é o site afirmando o que não tem.
+const LINKS = [
+  { href: '/', rotulo: 'Vitrine' },
+  { href: '/sobre', rotulo: 'Sobre' },
+];
+
+// O build pode entregar "/sobre" ou "/sobre/". Tirar a barra final deixa a
+// comparação igual nos dois casos; a raiz continua "/".
+const normaliza = (caminho: string) => caminho.replace(/\/+$/, '') || '/';
+const atual = normaliza(Astro.url.pathname);
+---
+<header class="topo">
+  <nav class="nav" aria-label="Principal">
+    <a class="marca" href="/">JVM</a>
+    {LINKS.map((l) => (
+      <a class="lk" href={l.href} aria-current={atual === l.href ? 'page' : undefined}>{l.rotulo}</a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .topo { position: fixed; top: calc(18px + env(safe-area-inset-top, 0px)); left: 0; right: 0; z-index: 50; display: flex; justify-content: center; padding: 0 14px; }
+
+  /* Pílula translúcida. Se não couber no celular, rola na horizontal. */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 7px 6px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--line2);
+    background: color-mix(in srgb, var(--bg2) 70%, transparent);
+    backdrop-filter: blur(20px) saturate(1.7);
+    -webkit-backdrop-filter: blur(20px) saturate(1.7);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .06);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .marca { font-family: var(--disp); font-weight: 700; font-size: 13.5px; letter-spacing: -.02em; color: var(--fg); text-decoration: none; padding: 0 13px 0 0; margin-right: 3px; border-right: 1px solid var(--line2); white-space: nowrap; }
+  .lk { font-size: 13.5px; color: var(--fg2); text-decoration: none; padding: 7px 14px; border-radius: 999px; white-space: nowrap; transition: color .2s, background .2s; }
+  .lk:hover { color: var(--fg); background: rgba(255, 255, 255, .06); }
+  .lk:focus-visible { border-radius: 999px; }
+  .lk[aria-current="page"] { color: var(--bg); background: var(--acc); font-weight: 500; }
+</style>
