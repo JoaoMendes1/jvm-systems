@@ -1,0 +1,28 @@
+/* Tokens do site. Fonte de verdade: docs/DESIGN_TOKENS.md.
+   As fontes (--disp, --edit, --body, --mono) não ficam aqui: são criadas
+   pela Fonts API, a partir do astro.config.mjs. */
+:root {
+  /* superfícies */
+  --bg: #07070A;
+  --bg2: #0C0C11;
+  --card: #101016;
+  --card2: #15151C;
+
+  /* bordas: branco com transparência fica literal, por exceção documentada */
+  --line: rgba(255, 255, 255, .065);
+  --line2: rgba(255, 255, 255, .13);
+
+  /* texto */
+  --fg: #F6F6F8;
+  --fg2: #A3A3AE;
+  --fg3: #6A6A76;
+
+  /* acento */
+  --acc: #FF9D48;
+  --acc2: #FFD2A6;
+  --vio: #B487FF;
+  --acc-dim: color-mix(in srgb, var(--acc) 11%, transparent);
+
+  /* semântica: significa "no ar" e nunca é usado como decoração */
+  --live: #4ADE80;
+}

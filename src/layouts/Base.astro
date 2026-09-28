@@ -1,0 +1,31 @@
+---
+// Layout de todas as páginas: head comum, fontes e estilo global.
+// Cada página passa o próprio título e, quando tiver, a descrição.
+import { Font } from 'astro:assets';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <!-- Preload só nas fontes visíveis logo ao abrir: título e corpo. -->
+    <Font cssVariable="--disp" preload />
+    <Font cssVariable="--body" preload />
+    <Font cssVariable="--edit" />
+    <Font cssVariable="--mono" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

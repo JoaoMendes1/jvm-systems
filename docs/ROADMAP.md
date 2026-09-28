@@ -11,11 +11,11 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.** O painel de
 escrita não precisa — publicar por commit funciona.
 
-## 📍 Status atual (25/09/2026)
+## 📍 Status atual (27/09/2026)
 
 | Fase | Status |
 |---|---|
-| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar, CI e content collections; falta tokens e layout base |
+| 1 · Fundação e deploy | ✅ Concluída |
 | 2 · Páginas e conteúdo | ⏳ Planejada |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
@@ -38,7 +38,7 @@ escrita não precisa — publicar por commit funciona.
       `AGENTS.md`). Fixadas sem `^`: Astro 7.3.5, `@astrojs/mdx` 8.0.2, TypeScript 6.0.3. (#1)
 - [x] Scaffold do Astro com MDX e TypeScript. (#1)
 - [x] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`. (#4)
-- [ ] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.
+- [x] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.
 - [x] CI no push para `staging`: `astro check` + `npm run build`. (#3)
 - [x] `Dockerfile` em duas etapas: Node gera o `dist/`, e um Caddy interno serve na porta 8080. (#2)
 - [x] Serviço `jvm-systems` no `docker-compose.yml` do `~/infra`, com `expose` (nunca `ports`). (#2)
