@@ -82,9 +82,10 @@ Título: <tipo>: <descrição curta> #<número>
 > O critério é o rastro: issue existe para registrar investigação, decisão e como
 > foi verificado. Onde não há decisão a registrar, ela é burocracia.
 >
-> **Neste repositório:** pílula e estudo de caso novos contam como documentação e dispensam
-> issue. Mudar o **schema** do conteúdo (campo novo, tag nova, regra de exibição) exige issue —
-> é o contrato que o painel futuro vai seguir.
+> **Neste repositório:** pílula, estudo de caso e **tag nova** dispensam issue — tag nova é
+> aditiva e não quebra nenhum arquivo existente. Exige issue a mudança de **schema** que pode
+> quebrar ou mudar conteúdo já escrito: campo obrigatório novo, campo ou tag renomeados ou
+> removidos, regra de exibição. É o contrato que o painel futuro vai seguir.
 
 2. **Toda alteração é feita primeiro na branch `staging`**, nunca direto em produção.
 

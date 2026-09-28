@@ -15,7 +15,7 @@ escrita não precisa — publicar por commit funciona.
 
 | Fase | Status |
 |---|---|
-| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar e CI na `staging`; faltam content collections e tokens |
+| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar, CI e content collections; falta tokens e layout base |
 | 2 · Páginas e conteúdo | ⏳ Planejada |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
@@ -37,7 +37,7 @@ escrita não precisa — publicar por commit funciona.
 - [x] **Verificar a versão atual do Astro e da integração MDX antes do scaffold** (regra 10 do
       `AGENTS.md`). Fixadas sem `^`: Astro 7.3.5, `@astrojs/mdx` 8.0.2, TypeScript 6.0.3. (#1)
 - [x] Scaffold do Astro com MDX e TypeScript. (#1)
-- [ ] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`.
+- [x] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`. (#4)
 - [ ] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.
 - [x] CI no push para `staging`: `astro check` + `npm run build`. (#3)
 - [x] `Dockerfile` em duas etapas: Node gera o `dist/`, e um Caddy interno serve na porta 8080. (#2)

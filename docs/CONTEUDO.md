@@ -2,9 +2,9 @@
 
 > Todo conteúdo do site é arquivo `.mdx` em `src/content/`. Este documento descreve o formato.
 >
-> **O schema em código é a fonte de verdade.** Ele fica no arquivo de configuração das content
-> collections do Astro e é validado a cada build. Este documento explica o schema e o porquê de
-> cada regra. Se os dois divergirem, o código vale e este documento é corrigido.
+> **O schema em código é a fonte de verdade.** Ele fica em `src/content.config.ts` e é validado
+> a cada build. Este documento explica o schema e o porquê de cada regra. Se os dois divergirem,
+> o código vale e este documento é corrigido.
 >
 > **Por que isto é um contrato e não só um guia:** na Fase 4, um painel vai escrever estes
 > arquivos sozinho. Ele só pode gravar o que passa neste schema.
@@ -200,8 +200,9 @@ rascunho: false
   uma categoria nova com uma pílula só.
 - **Os filtros da página de pílulas são derivados das tags em uso.** Tag do vocabulário sem
   nenhuma pílula publicada não vira botão.
-- **Tag nova** é uma linha no schema e uma linha aqui, no mesmo commit — e, como muda o
-  contrato, pede issue.
+- **Tag nova** é uma linha no schema e uma linha aqui, no mesmo commit. Dispensa issue: não
+  quebra nenhuma pílula existente. **Renomear ou remover** uma tag pede issue, porque quebra o
+  build de toda pílula que a usa.
 
 ### "Escrito no dia em que resolvi"
 
