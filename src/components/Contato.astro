@@ -1,0 +1,26 @@
+---
+// Chamada de contato do fim da Home e do Sobre. Só links diretos: sem
+// formulário no MVP (ver docs/DECISIONS.md). O e-mail também aparece
+// escrito, porque o mailto: não abre nada em aparelho sem app de e-mail.
+const EMAIL = 'joaodev21@gmail.com';
+const LINKEDIN = 'https://www.linkedin.com/in/jo%C3%A3o-victor-mendes-41521b1b9/';
+const GITHUB = 'https://github.com/JoaoMendes1';
+---
+<section class="cta" id="contato">
+  <h2>Vamos conversar?</h2>
+  <p class="convite">Aberto a vaga de desenvolvedor júnior, presencial na Grande Florianópolis ou remoto.</p>
+  <div class="actions">
+    <a class="btn p" href={`mailto:${EMAIL}`}>Mandar e-mail</a>
+    <a class="btn s" href={LINKEDIN}>LinkedIn</a>
+    <a class="btn s" href={GITHUB}>GitHub</a>
+  </div>
+  <p class="email">{EMAIL}</p>
+</section>
+
+<style>
+  .cta { margin-top: 90px; border-top: 1px solid var(--line); padding-top: 70px; text-align: center; scroll-margin-top: 24px; }
+  .cta h2 { font-size: clamp(30px, 5.4vw, 50px); margin-bottom: 18px; }
+  .convite { color: var(--fg2); max-width: 44ch; margin: 0 auto 30px; }
+  .actions { justify-content: center; }
+  .email { margin: 22px 0 0; font-family: var(--mono); font-size: 13px; color: var(--fg3); user-select: all; }
+</style>

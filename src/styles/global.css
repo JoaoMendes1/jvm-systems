@@ -32,3 +32,69 @@ h3 { letter-spacing: -.02em; }
 p { margin: 0 0 16px; }
 code, pre { font-family: var(--mono); }
 img { max-width: 100%; height: auto; }
+
+/* ── Padrões usados em mais de uma página ── */
+h2 { font-size: clamp(25px, 3.4vw, 33px); margin-bottom: 10px; }
+h3 { font-size: 19px; }
+
+/* Rótulo em mono acima dos títulos, com fio que se apaga à direita. */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--acc);
+  letter-spacing: .06em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--line2), transparent);
+}
+
+.lede { font-size: clamp(16px, 1.9vw, 18.5px); color: var(--fg2); max-width: 56ch; line-height: 1.6; }
+.ital { font-family: var(--edit); font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+.grad {
+  background: linear-gradient(98deg, var(--acc2) 0%, var(--acc) 42%, var(--vio) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Botões: primário em --acc com texto escuro, secundário quase transparente. */
+.actions { display: flex; gap: 11px; flex-wrap: wrap; }
+.btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  font-size: 14.5px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background .2s, border-color .2s;
+}
+.btn.p { background: var(--acc); color: var(--bg); }
+.btn.p:hover { background: var(--acc2); }
+.btn.s { background: rgba(255, 255, 255, .04); border-color: var(--line2); color: var(--fg); }
+.btn.s:hover { background: rgba(255, 255, 255, .09); border-color: var(--fg3); }
+
+/* Brilho diagonal no hover do primário: só com movimento permitido. */
+@media (prefers-reduced-motion: no-preference) {
+  .btn.p::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -70%;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent);
+    transform: skewX(-20deg);
+  }
+  .btn.p:hover::after { animation: sheen 1.1s ease; }
+  @keyframes sheen { 0% { left: -70%; } 55%, 100% { left: 130%; } }
+}
