@@ -15,7 +15,7 @@ escrita não precisa — publicar por commit funciona.
 
 | Fase | Status |
 |---|---|
-| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar; faltam content collections, tokens e CI |
+| 1 · Fundação e deploy | 🔄 Em andamento — esqueleto no ar e CI na `staging`; faltam content collections e tokens |
 | 2 · Páginas e conteúdo | ⏳ Planejada |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
@@ -39,7 +39,7 @@ escrita não precisa — publicar por commit funciona.
 - [x] Scaffold do Astro com MDX e TypeScript. (#1)
 - [ ] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`.
 - [ ] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.
-- [ ] CI no push para `staging`: `astro check` + `npm run build`.
+- [x] CI no push para `staging`: `astro check` + `npm run build`. (#3)
 - [x] `Dockerfile` em duas etapas: Node gera o `dist/`, e um Caddy interno serve na porta 8080. (#2)
 - [x] Serviço `jvm-systems` no `docker-compose.yml` do `~/infra`, com `expose` (nunca `ports`). (#2)
 - [x] Bloco `joaomendes.dev.br` no Caddyfile do `~/infra`, aplicado com `caddy reload` — sem
