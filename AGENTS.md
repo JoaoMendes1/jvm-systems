@@ -60,9 +60,7 @@ Título: <tipo>: <descrição curta> #<número>
 
 ### ✅ Critérios de Aceite
 - [ ] Condição verificável de que está pronto
-- [ ] Testes unitários criados (caminho feliz e cenários de erro) — obrigatório sempre que a
-      issue envolver lógica (handlers, validação, cálculo); dispensável em issues de
-      texto/estilo/documentação
+- [ ] Conferido no `npm run preview`
 ```
 > **Emenda (25/08/2026):** issue é obrigatória quando a alteração:
 > - mexe em **schema, dado de usuário, autenticação ou regra de negócio**;
@@ -159,7 +157,7 @@ quando houver issue. Pílula e estudo de caso novos usam `docs(pilulas)` e `docs
    (ex: Configurações + Ajuda numa só) em vez de multiplicar páginas por padrão.
 
 7. **CI automatizado no push para `staging`.** Um workflow do GitHub Actions roda `astro check`
-   e `npm run build` a cada push nessa branch — e os testes unitários, quando existirem. O build
+     e `npm run build` a cada push nessa branch. O build
    é o teste mais importante deste projeto: é nele que o schema do conteúdo é validado, então
    frontmatter errado quebra o CI em vez de chegar ao site. Se quebrar, corrige antes de promover
    para `main`. Configura uma vez, roda sozinho depois.
