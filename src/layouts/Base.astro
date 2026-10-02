@@ -26,22 +26,23 @@ const { title, description } = Astro.props;
     <Font cssVariable="--edit" />
     <Font cssVariable="--mono" />
   </head>
-   <body>
+  <body>
     <!-- Atmosfera: decoração fixa atrás do conteúdo, escondida do leitor de tela. -->
     <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="vig" aria-hidden="true"></div>
-        <Nav />
+    <Nav />
     <main class="wrap">
       <slot />
     </main>
     <footer class="rodape">
-      João Victor Mendes · <a href="https://github.com/JoaoMendes1/jvm-systems">código deste site</a>
+      João Victor Mendes · <a href="https://github.com/JoaoMendes1/jvm-systems" target="_blank" rel="noopener noreferrer">código deste site</a>
     </footer>
   </body>
 </html>
 
 <style>
-  /* Largura máxima e margem do conteúdo de todas as páginas. */
+  /* Largura máxima e margem do conteúdo de todas as páginas. O topo maior
+     deixa espaço para a barra de navegação fixa. */
   .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 136px 24px 40px; }
   @media (max-width: 620px) { .wrap { padding: 104px 16px 32px; } }
 
