@@ -5,4 +5,11 @@
 :8080 {
 	root * /srv
 	file_server
+
+	# Endereço inexistente: devolve o 404.html gerado pelo Astro, mantendo o
+	# status 404 (o file_server usa o status do erro dentro do handle_errors).
+	handle_errors 404 {
+		rewrite * /404.html
+		file_server
+	}
 }

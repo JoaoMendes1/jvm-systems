@@ -1,0 +1,63 @@
+---
+// Política de privacidade do site e do app OAuth usado no backup. Cada
+// afirmação confere com a configuração real: Caddyfiles sem diretiva `log`,
+// fontes pela Fonts API (astro.config.mjs) e escopo `drive.file` no app.
+// Repositório público: nada de IP, usuário ou porta do servidor aqui.
+import Base from '../layouts/Base.astro';
+import { formatarData, dataISO } from '../lib/datas';
+
+const ATUALIZADA = new Date('2026-10-02');
+const EMAIL = 'joaodev21@gmail.com';
+---
+<Base title="Privacidade — João Victor Mendes" description="O que este site e os meus projetos fazem com os seus dados.">
+  <p class="eyebrow">privacidade</p>
+  <h1 class="titulo">Política de<br /><span class="ital grad">privacidade</span></h1>
+  <p class="lede abertura">
+    Atualizada em <time datetime={dataISO(ATUALIZADA)}>{formatarData(ATUALIZADA)}</time>.
+  </p>
+
+  <div class="prosa">
+    <h2>Este site</h2>
+    <ul>
+      <li><strong>Não usa cookies</strong> e não guarda nada no seu navegador.</li>
+      <li><strong>Não tem analytics</strong> nem nenhum script de terceiros.</li>
+      <li>As fontes são servidas pelo próprio site: abrir uma página não envia o seu endereço IP ao Google nem a outro serviço.</li>
+      <li>O servidor não guarda registro de acesso: não existe lista de quem visitou qual página.</li>
+      <li>Os links para GitHub, LinkedIn e para os projetos levam a outros sites. Ao clicar, vale a política de cada um.</li>
+    </ul>
+
+    <h2>Os meus projetos</h2>
+    <ul>
+      <li>O <strong>AniDeck</strong> tem política própria, em <a href="https://anideck.joaomendes.dev.br/privacidade" target="_blank" rel="noopener noreferrer">anideck.joaomendes.dev.br/privacidade</a>.</li>
+      <li>O <strong>Grimoire</strong> ainda não tem. Até ter, vale esta página: os dados que você salva nele ficam no banco do projeto, no Supabase, e entram no backup descrito abaixo.</li>
+    </ul>
+
+    <h2>Backup e o app do Google</h2>
+    <ul>
+      <li>Uso um app próprio, registrado no Google Cloud, para guardar backups dos meus projetos no meu Google Drive.</li>
+      <li>Ele usa o escopo <code>drive.file</code>: <strong>só enxerga os arquivos que ele mesmo criou.</strong> Não lê, não lista e não altera nenhum outro arquivo do Drive.</li>
+      <li>O app é usado só por mim, na minha própria conta. Ninguém mais faz login nele.</li>
+      <li>Os backups incluem uma cópia dos bancos do AniDeck e do Grimoire, e por isso podem conter dados de quem usa esses apps. Cada cópia é guardada por 30 dias e depois apagada.</li>
+      <li>Os dados que passam pelo app não são compartilhados, vendidos nem usados para outra finalidade além do backup.</li>
+    </ul>
+
+    <h2>Contato</h2>
+    <p>
+      Para dúvidas sobre privacidade ou para pedir a exclusão dos seus dados, escreva para
+      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. Dados apagados de um projeto também saem dos
+      backups em até 30 dias, quando as cópias antigas são apagadas.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .titulo { font-size: clamp(36px, 6.4vw, 58px); }
+  .abertura { margin-top: 22px; }
+  .prosa { max-width: 64ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
+  .prosa h2 { padding-top: 48px; margin-bottom: 14px; color: var(--fg); }
+  .prosa ul { margin: 0; padding-left: 20px; }
+  .prosa li { margin-bottom: 10px; }
+  .prosa strong { color: var(--fg); font-weight: 500; }
+  .prosa a { color: var(--acc); }
+  .prosa code { font-size: .9em; color: var(--fg); }
+</style>

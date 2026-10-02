@@ -5,11 +5,11 @@
 | 3 | Pílulas (lista) | `/pilulas` | `src/pages/pilulas/index.astro` | ✅ Implementada | Fase 2 |
 | 4 | Pílula | `/pilulas/[slug]` | `src/pages/pilulas/[slug].astro` | ✅ Implementada | Fase 2 |
 | 5 | Sobre | `/sobre` | `src/pages/sobre.astro` | ✅ Implementada | Fase 2 |
-| 6 | Privacidade | `/privacidade` | — | ⏳ Só planejada | Fase 2 |
-| 7 | Página não encontrada | 404 | — | ⏳ Só planejada | Fase 2 |
+| 6 | Privacidade | `/privacidade` | `src/pages/privacidade.astro` | ✅ Implementada | Fase 2 |
+| 7 | Página não encontrada | 404 | `src/pages/404.astro` | ✅ Implementada | Fase 2 |
 | 8 | Painel de escrita | fora do site | — | ✅ Prototipada · pós-MVP | Fase 4 |
 
-**Total: 0 páginas implementadas.**
+**Total: 7 páginas implementadas.**
 
 > Protótipo de referência: `prototipos/vitrine-v4.html`. As telas 1 a 5 e 8 estão nele. Após a
 > implementação da Fase 2, o protótipo sai do repositório.

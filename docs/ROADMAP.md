@@ -16,7 +16,7 @@ escrita não precisa — publicar por commit funciona.
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | 🚧 Em andamento — Home, Sobre, Pílulas e estudo de caso no ar |
+| 2 · Páginas e conteúdo | 🚧 Em andamento — todas as páginas no ar; falta a revisão de conteúdo |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
@@ -58,9 +58,9 @@ escrita não precisa — publicar por commit funciona.
 - [x] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
       `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa. (#7)
 - [x] **Sobre:** trajetória e ferramental, com a barra de navegação. (#6)
-- [ ] **Privacidade:** `/privacidade`. Cobre o site (sem cookies, sem analytics) e o app OAuth do
-      Google usado pelo backup, que hoje aponta a política para o Grimoire.
-- [ ] Página 404.
+- [x] **Privacidade:** `/privacidade`. Cobre o site (sem cookies, sem analytics) e o app OAuth do
+      Google usado pelo backup, que hoje aponta a política para o Grimoire. (#9)
+- [x] Página 404, servida pelo Caddy do container com status 404. (#9)
 - [ ] **Conteúdo mínimo para o MVP:** estudo de caso do AniDeck + a primeira pílula
       ("O free tier hiberna, e o seu estado em memória some junto", já escrita no protótipo).
 - [ ] **Preencher o que a v4 do protótipo deixou em aberto de propósito.** Conferir antes de dar
@@ -79,6 +79,8 @@ escrita não precisa — publicar por commit funciona.
         diz que ele mostraria "ligado";
   - [ ] estudo de caso do AniDeck: cada afirmação conferida contra o repositório, incluindo o
         "quase um minuto" do primeiro acesso, que hoje não tem medição;
+  - [ ] política de privacidade: fatos do Grimoire (que dados guarda, como apagar a conta) e se
+        a política do AniDeck menciona o backup no Google Drive;
   - [ ] textos da home, do Sobre e da página de pílulas.
 
 ## ✨ Fase 3: Acabamento e publicação — fim do MVP
