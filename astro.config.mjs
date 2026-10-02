@@ -1,11 +1,19 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // Endereço público do site. O Astro usa para gerar URLs absolutas
-  // (sitemap e link canônico, na Fase 3).
+  // Endereço público do site. O Astro usa para gerar URLs absolutas: a URL
+  // canônica, a imagem de compartilhamento e o sitemap.
   site: 'https://joaomendes.dev.br',
-  integrations: [mdx()],
+  integrations: [
+    mdx(),
+    // Sitemap gerado no build a partir das páginas que existem. A 404 fica
+    // de fora: ela não é página para buscador listar.
+    sitemap({
+      filter: (page) => !/\/404\/?$/.test(page),
+    }),
+  ],
   // Fontes baixadas no build e servidas pelo próprio site, não pelo Google:
   // a visita não envia o IP do visitante a terceiros. Cada cssVariable é o
   // nome do token no docs/DESIGN_TOKENS.md.

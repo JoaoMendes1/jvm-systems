@@ -26,7 +26,7 @@ if (pilula.data.projeto && !projeto) {
   throw new Error(`Pílula "${pilula.id}": o projeto "${pilula.data.projeto.id}" não existe em src/content/projetos/.`);
 }
 ---
-<Base title={`${titulo} — João Victor Mendes`} description={resumo}>
+<Base title={`${titulo} — João Victor Mendes`} description={resumo} type="article">
   <a class="voltar" href="/pilulas">← pílulas</a>
   <p class="eyebrow">
     <span><time datetime={dataISO(data)}>{formatarData(data)}</time> · {tags.join(' · ')} · {tempoDeLeitura(pilula.body)} min</span>

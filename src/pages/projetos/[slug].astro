@@ -26,7 +26,7 @@ const sumario = headings.filter((h) => h.depth === 2);
 // "https://anideck.joaomendes.dev.br" vira "anideck.joaomendes.dev.br".
 const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
 ---
-<Base title={`${nome} — estudo de caso`} description={resumo}>
+<Base title={`${nome} — estudo de caso`} description={resumo} type="article">
   <a class="voltar" href="/#projetos">← vitrine</a>
 
   <header class="cabeca">

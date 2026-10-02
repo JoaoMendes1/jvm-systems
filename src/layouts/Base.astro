@@ -1,6 +1,7 @@
 ---
-// Layout de todas as páginas: head comum, fontes e estilo global.
-// Cada página passa o próprio título e, quando tiver, a descrição.
+// Layout de todas as páginas: head comum, metadados de compartilhamento,
+// fontes e estilo global. Cada página passa o próprio título e, quando
+// tiver, a descrição.
 import { Font } from 'astro:assets';
 import '../styles/tokens.css';
 import '../styles/global.css';
@@ -9,9 +10,24 @@ import Nav from '../components/Nav.astro';
 interface Props {
   title: string;
   description?: string;
+  // 'article' para pílula e estudo de caso; o resto do site é 'website'.
+  type?: 'website' | 'article';
+  // A 404 não deve aparecer em buscador.
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, type = 'website', noindex = false } = Astro.props;
+
+// Descrição usada quando a página não passa a sua: a mesma da home.
+const descricao = description ?? 'Projetos que construí e mantenho no ar, com o código aberto no GitHub.';
+
+// URL canônica sempre com barra final, o formato que o build gera e que o
+// sitemap lista: "/sobre" e "/sobre/" contam como uma página só.
+const caminho = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonica = new URL(caminho, Astro.site).href;
+
+// Imagem única de compartilhamento, em public/og.png. Precisa de URL absoluta.
+const imagem = new URL('/og.png', Astro.site).href;
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -19,7 +35,24 @@ const { title, description } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonica} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- Open Graph: o card que aparece ao colar o link no LinkedIn ou WhatsApp. -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="João Victor Mendes" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagem} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="João Victor Mendes — Construo software e coloco no ar." />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <!-- Preload só nas fontes visíveis logo ao abrir: título e corpo. -->
     <Font cssVariable="--disp" preload />
     <Font cssVariable="--body" preload />
