@@ -16,7 +16,7 @@ escrita não precisa — publicar por commit funciona.
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | 🚧 Em andamento — Home, Sobre, Pílulas e estudo de caso no ar |
+| 2 · Páginas e conteúdo | 🚧 Em andamento — Home, Sobre e Pílulas no ar |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
@@ -53,8 +53,8 @@ escrita não precisa — publicar por commit funciona.
 
 - [x] **Home:** hero, quadro "rodando agora", grade de projetos e chamada de contato — quadro e
       grade gerados a partir de `src/content/projetos/`. (#5)
-- [x] **Estudo de caso:** rota `/projetos/[slug]`, com sumário gerado a partir dos títulos. (#8)
-- [x] Componentes MDX do estudo de caso: `Decisao` e `Terminal` (#8). `Callout` pronto na #7.
+- [ ] **Estudo de caso:** rota `/projetos/[slug]`, com sumário gerado a partir dos títulos.
+- [ ] Componentes MDX do estudo de caso: `Decisao` e `Terminal`. (`Callout` pronto na #7)
 - [x] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
       `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa. (#7)
 - [x] **Sobre:** trajetória e ferramental, com a barra de navegação. (#6)
@@ -68,17 +68,13 @@ escrita não precisa — publicar por commit funciona.
   - [x] contagens do hero (serviços no ar, pílulas) → calculadas no build a partir das coleções;
         stat com valor zero não aparece; (#5)
   - [ ] data de entrada em produção do AniDeck → campo `desde` do arquivo do projeto;
-  - [x] trecho de código do Kill Switch → copiado do `cmd/web/main.go` real; (#8)
+  - [ ] trecho de código do Kill Switch → copiado do `cmd/web/main.go` real;
   - [x] endereço de e-mail e link do LinkedIn → no componente `Contato`; (#5)
   - [ ] texto do estudo de caso → cada afirmação técnica conferida contra o repositório do
         AniDeck;
 - [ ] **Revisão de conteúdo — por último na fase.** Todo texto escrito durante o porte é
       provisório e é revisado de uma vez aqui, com os fatos confirmados:
-  - [ ] primeira pílula: `data` (dia em que o texto foi escrito) e fatos da história — o
-        texto diz que o painel mostrava "desligado", mas o comentário do `cmd/web/main.go`
-        diz que ele mostraria "ligado";
-  - [ ] estudo de caso do AniDeck: cada afirmação conferida contra o repositório, incluindo o
-        "quase um minuto" do primeiro acesso, que hoje não tem medição;
+  - [ ] primeira pílula: `data` (dia em que o texto foi escrito) e fatos da história;
   - [ ] textos da home, do Sobre e da página de pílulas.
 
 ## ✨ Fase 3: Acabamento e publicação — fim do MVP

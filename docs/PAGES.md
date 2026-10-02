@@ -1,7 +1,7 @@
 | # | Página | Rota | Arquivo | Status | Fase do Roadmap |
 |---|---|---|---|---|---|
 | 1 | Home | `/` | `src/pages/index.astro` | ✅ Implementada | Fase 2 |
-| 2 | Estudo de caso | `/projetos/[slug]` | `src/pages/projetos/[slug].astro` | ✅ Implementada (só AniDeck) | Fase 2 |
+| 2 | Estudo de caso | `/projetos/[slug]` | — | ✅ Prototipada (só AniDeck) | Fase 2 |
 | 3 | Pílulas (lista) | `/pilulas` | `src/pages/pilulas/index.astro` | ✅ Implementada | Fase 2 |
 | 4 | Pílula | `/pilulas/[slug]` | `src/pages/pilulas/[slug].astro` | ✅ Implementada | Fase 2 |
 | 5 | Sobre | `/sobre` | `src/pages/sobre.astro` | ✅ Implementada | Fase 2 |
