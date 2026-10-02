@@ -1,0 +1,11 @@
+---
+// Lição geral de uma pílula, em destaque. Uso no MDX: <Callout>texto</Callout>.
+// O componente chega ao MDX pela página da pílula (prop `components`), então
+// o arquivo .mdx não precisa importar nada.
+---
+<aside class="callout"><slot /></aside>
+
+<style>
+  .callout { border: 1px solid var(--line2); border-radius: 16px; background: var(--acc-dim); padding: 20px 22px; font-size: 15.5px; color: var(--fg); margin: 10px 0 22px; max-width: 64ch; line-height: 1.66; }
+  .callout :global(p:last-child) { margin-bottom: 0; }
+</style>

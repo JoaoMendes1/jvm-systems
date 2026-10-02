@@ -1,8 +1,14 @@
 ---
 // Barra de navegação fixa de todas as páginas. Só entra aqui página que
-// existe: link para rota inexistente é o site afirmando o que não tem.
+// existe e tem conteúdo: link para lista vazia é o site afirmando o que não tem.
+import { getCollection } from 'astro:content';
+import { pilulaPublicada } from '../lib/conteudo';
+
+const temPilulas = (await getCollection('pilulas')).some(pilulaPublicada);
+
 const LINKS = [
   { href: '/', rotulo: 'Vitrine' },
+  ...(temPilulas ? [{ href: '/pilulas', rotulo: 'Pílulas' }] : []),
   { href: '/sobre', rotulo: 'Sobre' },
 ];
 
@@ -10,12 +16,15 @@ const LINKS = [
 // comparação igual nos dois casos; a raiz continua "/".
 const normaliza = (caminho: string) => caminho.replace(/\/+$/, '') || '/';
 const atual = normaliza(Astro.url.pathname);
+
+// "/pilulas/free-tier-hiberna" também marca "Pílulas" como ativo.
+const ativo = (href: string) => atual === href || (href !== '/' && atual.startsWith(`${href}/`));
 ---
 <header class="topo">
   <nav class="nav" aria-label="Principal">
     <a class="marca" href="/">JVM</a>
     {LINKS.map((l) => (
-      <a class="lk" href={l.href} aria-current={atual === l.href ? 'page' : undefined}>{l.rotulo}</a>
+      <a class="lk" href={l.href} aria-current={ativo(l.href) ? 'page' : undefined}>{l.rotulo}</a>
     ))}
   </nav>
 </header>

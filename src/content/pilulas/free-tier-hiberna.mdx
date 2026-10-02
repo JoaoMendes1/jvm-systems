@@ -4,7 +4,13 @@ resumo: Uma flag que só existia em memória voltava ao padrão a cada hibernaç
 data: 2026-09-18
 tags: [infra]
 projeto: anideck
-rascunho: true
+rascunho: false
 ---
 
-Texto escrito na Fase 2, a partir do protótipo.
+Eu tinha um interruptor no painel do AniDeck para cortar as chamadas à API externa quando ela degradasse. Funcionava: clicava, parava na hora. No dia seguinte, o painel mostrava desligado e o log mostrava requisição saindo.
+
+A flag morava numa variável de pacote. No free tier, o container hiberna sem tráfego e sobe do zero na próxima visita, com todo valor padrão de volta. O painel lia o banco; o backend lia a memória. **Havia duas fontes de verdade para o mesmo interruptor, e elas só concordavam até o serviço reiniciar.**
+
+<Callout>**A lição geral:** estado que precisa sobreviver a um restart não pode morar só no processo. E "restart" não é só deploy — é hibernação, OOM kill, migração de host. Todos acontecem sem você olhando.</Callout>
+
+A correção foi gravar a flag numa tabela de configuração e relê-la no boot. A memória continua sendo a fonte de leitura, porque precisa ser instantânea; o banco virou a fonte de verdade na inicialização.

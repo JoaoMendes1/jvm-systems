@@ -1,5 +1,5 @@
 // Regras de exibição do docs/CONTEUDO.md ("Onde o projeto aparece").
-// Ficam num lugar só para nenhuma página decidir do seu jeito se um projeto
+// Ficam num lugar só para nenhuma página decidir do seu jeito se algo
 // aparece. Regra errada não quebra o build, só entrega errado: mudou algo
 // aqui, confira no `npm run preview` contra a tabela do docs/CONTEUDO.md.
 
@@ -21,10 +21,14 @@ export interface PilulaEntrada {
   data: { rascunho: boolean };
 }
 
-// Card na grade: não é rascunho e tem repositório. Sem repo, o card seria
-// uma promessa.
+// Rascunho fica fora do site: nem página, nem lista, nem contagem.
+export function visivel(p: { data: { rascunho: boolean } }): boolean {
+  return !p.data.rascunho;
+}
+
+// Card na grade: visível e com repositório. Sem repo, o card seria uma promessa.
 export function temCard(p: ProjetoEntrada): boolean {
-  return !p.data.rascunho && Boolean(p.data.repo);
+  return visivel(p) && Boolean(p.data.repo);
 }
 
 // Quadro "rodando agora": tem card, está no ar e tem endereço.
@@ -44,5 +48,13 @@ export function porOrdem(a: ProjetoEntrada, b: ProjetoEntrada): number {
 }
 
 export function pilulaPublicada(p: PilulaEntrada): boolean {
-  return !p.data.rascunho;
+  return visivel(p);
+}
+
+// Minutos de leitura a 200 palavras por minuto, arredondado para cima e
+// nunca menos que 1. Conta o MDX cru, então marcação e componentes entram
+// na conta: erra um pouco para mais, o que serve para um "1 min".
+export function tempoDeLeitura(corpo = ''): number {
+  const palavras = corpo.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(palavras / 200));
 }

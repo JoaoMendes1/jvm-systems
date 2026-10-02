@@ -11,8 +11,10 @@ const GITHUB = 'https://github.com/JoaoMendes1';
   <p class="convite">Aberto a vaga de desenvolvedor júnior, presencial na Grande Florianópolis ou remoto.</p>
   <div class="actions">
     <a class="btn p" href={`mailto:${EMAIL}`}>Mandar e-mail</a>
-    <a class="btn s" href={LINKEDIN}>LinkedIn</a>
-    <a class="btn s" href={GITHUB}>GitHub</a>
+    <!-- Abrem em nova guia para o visitante não sair do portfólio.
+         noopener impede a página aberta de controlar esta guia. -->
+    <a class="btn s" href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a class="btn s" href={GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
   <p class="email">{EMAIL}</p>
 </section>

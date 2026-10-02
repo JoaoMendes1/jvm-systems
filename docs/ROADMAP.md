@@ -16,7 +16,7 @@ escrita não precisa — publicar por commit funciona.
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | 🚧 Em andamento — Home e Sobre no ar |
+| 2 · Páginas e conteúdo | 🚧 Em andamento — Home, Sobre e Pílulas no ar |
 | 3 · Acabamento e publicação | ⏳ Planejada |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
@@ -54,9 +54,9 @@ escrita não precisa — publicar por commit funciona.
 - [x] **Home:** hero, quadro "rodando agora", grade de projetos e chamada de contato — quadro e
       grade gerados a partir de `src/content/projetos/`. (#5)
 - [ ] **Estudo de caso:** rota `/projetos/[slug]`, com sumário gerado a partir dos títulos.
-- [ ] Componentes MDX do estudo de caso: `Decisao`, `Terminal` e `Callout`.
-- [ ] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
-      `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa.
+- [ ] Componentes MDX do estudo de caso: `Decisao` e `Terminal`. (`Callout` pronto na #7)
+- [x] **Pílulas:** lista em `/pilulas` com filtro por tag e página individual em
+      `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa. (#7)
 - [x] **Sobre:** trajetória e ferramental, com a barra de navegação. (#6)
 - [ ] **Privacidade:** `/privacidade`. Cobre o site (sem cookies, sem analytics) e o app OAuth do
       Google usado pelo backup, que hoje aponta a política para o Grimoire.
@@ -72,7 +72,10 @@ escrita não precisa — publicar por commit funciona.
   - [x] endereço de e-mail e link do LinkedIn → no componente `Contato`; (#5)
   - [ ] texto do estudo de caso → cada afirmação técnica conferida contra o repositório do
         AniDeck;
-  - [ ] todo texto do site revisado pela seção "Tom e posicionamento" do `docs/CONTEUDO.md`.
+- [ ] **Revisão de conteúdo — por último na fase.** Todo texto escrito durante o porte é
+      provisório e é revisado de uma vez aqui, com os fatos confirmados:
+  - [ ] primeira pílula: `data` (dia em que o texto foi escrito) e fatos da história;
+  - [ ] textos da home, do Sobre e da página de pílulas.
 
 ## ✨ Fase 3: Acabamento e publicação — fim do MVP
 

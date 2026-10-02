@@ -1,0 +1,63 @@
+---
+// Página de uma pílula. getStaticPaths gera uma rota por pílula publicada;
+// o resto da página roda uma vez para cada uma.
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import { pilulaPublicada, temEstudoDeCaso, tempoDeLeitura } from '../../lib/conteudo';
+import { formatarData, dataISO } from '../../lib/datas';
+
+export const getStaticPaths = (async () => {
+  const pilulas = (await getCollection('pilulas')).filter(pilulaPublicada);
+  return pilulas.map((pilula) => ({ params: { slug: pilula.id }, props: { pilula } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { pilula } = Astro.props;
+const { Content } = await render(pilula);
+const { titulo, resumo, data, atualizado, tags } = pilula.data;
+
+// O schema garante o formato do `projeto`, mas não que o arquivo exista.
+// Se não existir, o build para aqui, em vez de publicar um link quebrado.
+const projeto = pilula.data.projeto ? await getEntry(pilula.data.projeto) : undefined;
+if (pilula.data.projeto && !projeto) {
+  throw new Error(`Pílula "${pilula.id}": o projeto "${pilula.data.projeto.id}" não existe em src/content/projetos/.`);
+}
+---
+<Base title={`${titulo} — João Victor Mendes`} description={resumo}>
+  <a class="voltar" href="/pilulas">← pílulas</a>
+  <p class="eyebrow">
+    <span><time datetime={dataISO(data)}>{formatarData(data)}</time> · {tags.join(' · ')} · {tempoDeLeitura(pilula.body)} min</span>
+  </p>
+  <h1 class="titulo">{titulo}</h1>
+  {atualizado && (
+    <p class="nota">Atualizada em <time datetime={dataISO(atualizado)}>{formatarData(atualizado)}</time>. O que mudou está no próprio texto.</p>
+  )}
+
+  <div class="prosa">
+    <Content components={{ Callout }} />
+  </div>
+
+  {projeto && temEstudoDeCaso(projeto) && (
+    <p class="relacionado">Do projeto <a href={`/projetos/${projeto.id}`}>{projeto.data.nome}</a>.</p>
+  )}
+</Base>
+
+<style>
+  .voltar { display: inline-block; margin-bottom: 28px; font-family: var(--mono); font-size: 11.5px; color: var(--fg3); text-decoration: none; }
+  .voltar:hover { color: var(--acc); }
+  .titulo { font-size: clamp(31px, 5.2vw, 48px); max-width: 19ch; }
+  .nota { margin-top: 18px; font-family: var(--mono); font-size: 11.5px; color: var(--fg3); }
+
+  /* O texto vem do MDX, fora deste componente: por isso o :global. */
+  .prosa { margin-top: 38px; max-width: 64ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
+  .prosa :global(strong) { color: var(--fg); font-weight: 500; }
+  .prosa :global(h2) { margin: 40px 0 14px; }
+  .prosa :global(a) { color: var(--acc); }
+  .prosa :global(code) { font-size: .9em; }
+
+  .relacionado { margin-top: 40px; font-size: 14px; color: var(--fg3); }
+  .relacionado a { color: var(--acc); }
+</style>
