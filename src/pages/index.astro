@@ -163,4 +163,30 @@ const dominio = (url?: string) => (url ? new URL(url).host : '');
 
   /* Capa: gradiente escolhido pelo campo `visual`, com grade que se apaga. */
   .cap { height: 142px; position: relative; border-bottom: 1px solid var(--line); }
-  .cap::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, .05)
+  .cap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(150% 95% at 18% 0%, #000, transparent 70%);
+  }
+  .cap.laranja { background: linear-gradient(135deg, #301C10, #41230F 52%, #120F0D); }
+  .cap.verde { background: linear-gradient(135deg, #0F211B, #12332A 52%, #0C1211); }
+  .cap.violeta { background: linear-gradient(135deg, #191627, #26213E 52%, #101017); }
+  .cap.neutro { background: linear-gradient(135deg, #1B1B21, #27272F 52%, #0F0F13); }
+
+  .corpo { padding: 22px 24px 24px; }
+  .corpo p { font-size: 14.5px; color: var(--fg2); margin: 10px 0 17px; line-height: 1.56; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .chip { font-family: var(--mono); font-size: 10.5px; padding: 4px 9px; border-radius: 7px; border: 1px solid var(--line2); color: var(--fg2); }
+  .chip.principal { background: var(--acc-dim); border-color: transparent; color: var(--acc); }
+  .more { display: inline-flex; gap: 8px; margin-top: 19px; font-size: 13.5px; font-weight: 500; color: var(--acc); text-decoration: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .card:hover { transform: translateY(-4px); }
+    .more span { transition: transform .25s; }
+    .card:hover .more span { transform: translateX(5px); }
+  }
+</style>
