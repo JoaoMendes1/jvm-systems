@@ -19,15 +19,15 @@ interface Props {
 const { title, description, type = 'website', noindex = false } = Astro.props;
 
 // Descrição usada quando a página não passa a sua: a mesma da home.
-const descricao = description ?? 'Projetos que construí e mantenho no ar, com o código aberto no GitHub.';
+const descricao = description ?? 'Portfólio de João Victor Mendes: projetos em produção, com código aberto no GitHub e as decisões técnicas de cada um.';
 
 // URL canônica sempre com barra final, o formato que o build gera e que o
 // sitemap lista: "/sobre" e "/sobre/" contam como uma página só.
 const caminho = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonica = new URL(caminho, Astro.site).href;
 
-// Imagem única de compartilhamento, em public/og.png. Precisa de URL absoluta.
-const imagem = new URL('/og.png', Astro.site).href;
+// O ?v=2 força o LinkedIn a buscar a imagem de novo. Trocou a imagem? Suba o número.
+const imagem = new URL('/og.png?v=2', Astro.site).href;
 ---
 <!doctype html>
 <html lang="pt-BR">
