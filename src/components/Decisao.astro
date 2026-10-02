@@ -1,0 +1,46 @@
+---
+// Bloco de decisão do estudo de caso. As props são o contrato descrito no
+// docs/CONTEUDO.md: o painel da Fase 4 vai escrever exatamente estes campos.
+interface Props {
+  titulo: string;
+  contexto: string;
+  escolhi: string;
+  descartei: string;
+  custo: string;
+}
+
+const { titulo, contexto, escolhi, descartei, custo } = Astro.props;
+
+const linhas = [
+  { rotulo: 'contexto', texto: contexto },
+  { rotulo: 'escolhi', texto: escolhi, destaque: true },
+  { rotulo: 'descartei', texto: descartei },
+  { rotulo: 'custo', texto: custo },
+];
+---
+<div class="dec">
+  <h3>{titulo}</h3>
+  <dl>
+    {linhas.map((l) => (
+      <div class="row">
+        <dt>{l.rotulo}</dt>
+        <dd class:list={{ destaque: l.destaque }}>{l.texto}</dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  /* Filete em gradiente à esquerda, como no docs/DESIGN_TOKENS.md. */
+  .dec { position: relative; border: 1px solid var(--line); border-radius: 18px; background: var(--card); padding: 24px 26px; margin-bottom: 14px; overflow: hidden; transition: border-color .25s, background .25s; }
+  .dec:hover { border-color: var(--line2); background: var(--card2); }
+  .dec::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--acc), color-mix(in srgb, var(--vio) 40%, transparent) 55%, transparent); }
+  h3 { font-size: 17.5px; letter-spacing: -.025em; margin: 0 0 16px; color: var(--fg); }
+  dl { margin: 0; }
+  .row { display: grid; grid-template-columns: 94px 1fr; gap: 5px 18px; font-size: 14.5px; padding: 9px 0; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; padding-top: 0; }
+  dt { font-family: var(--mono); font-size: 10px; color: var(--fg3); padding-top: 5px; letter-spacing: .06em; }
+  dd { margin: 0; color: var(--fg2); line-height: 1.6; }
+  dd.destaque { color: var(--fg); font-weight: 500; }
+  @media (max-width: 620px) { .row { grid-template-columns: 1fr; gap: 2px; } }
+</style>
