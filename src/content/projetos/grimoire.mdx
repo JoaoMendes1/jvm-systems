@@ -20,7 +20,7 @@ Eu anotava palavras em inglês e não tinha onde guardar o termo, a tradução e
 
 Começou com SQLite, no próprio computador. Migrei para o Supabase quando precisei usar o mesmo vocabulário em aparelhos diferentes — e por isso ele é instalável no celular como aplicativo.
 
-**Está em desenvolvimento.** Hoje é um caderno pessoal. O próximo passo é trocar a tradução por IA, e virar produto para outras pessoas ainda é uma decisão em aberto.
+**Está em desenvolvimento.** Hoje é um caderno pessoal. O próximo passo é a revisão espaçada: o app passa a dizer o que revisar hoje, antes de a palavra ser esquecida. Virar produto para outras pessoas ainda é uma decisão em aberto.
 
 ## Como funciona
 
@@ -54,9 +54,9 @@ A tradução e o áudio vêm do Google, mas **não de uma API pública**: são e
 
 ## IA no projeto
 
-- **Planejado — tradução com o Gemini.** Substituir os endpoints internos do Google por uma API com contrato.
-- **Planejado — correção e contexto.** A IA corrige a grafia do termo em inglês, traduz e escreve uma frase de exemplo antes de salvar.
-- **Planejado — frase de origem.** Guardar onde a palavra foi encontrada: palavra solta se esquece, palavra com contexto fica.
+- **Planejado — worker de decodificação com o Gemini.** Colo a frase e a resposta é imediata; um processo separado corrige a grafia, traduz, escreve uma frase de exemplo e sugere um rótulo. Substitui os endpoints internos do Google por uma API com contrato.
+- **Planejado — busca semântica com pgvector.** O mesmo worker gera o embedding de cada frase. Com ele, a ficha mostra frases parecidas e o app avisa sobre quase-duplicatas antes de gravar.
+- **Por que a IA vem depois:** o worker sugere rótulo, então precisa de uma lista canônica de rótulos antes de existir. Sem ela, grava texto livre, e "Code", "Código" e "Golang" viram três coisas diferentes.
 
 ## Três decisões e o que elas custaram
 
@@ -152,9 +152,9 @@ func InitDB() error {
 
 ## Em andamento
 
-- Tradução com o Gemini, com correção e frase de exemplo
-- Falha do Google devolvida como 503, e não como erro interno 500
-- Limite de requisições por usuário, e não por IP
-- Primeiros testes nas funções puras de tradução
-- Depois da IA: app Android com captura por cima de jogos, e repetição espaçada com estatísticas de estudo
-- O plano completo está no [roadmap do projeto](https://github.com/JoaoMendes1/grimoire/blob/main/docs/ROADMAP.md)
+- **Próximo:** revisão espaçada, com a fila do dia dimensionada pelo tempo disponível. Antes, decidir entre SM-2 e FSRS, porque a escolha define as colunas novas do banco
+- Rótulos canônicos com sinônimos, no lugar das categorias em texto livre
+- Relatório com curva de retenção, calculado no Postgres
+- Worker de IA e busca semântica, nessa ordem
+- Modo Jogo, com rank e XP, desligável para quem quer só estudar
+- O plano completo, com o motivo da ordem, está no [roadmap do projeto](https://github.com/JoaoMendes1/grimoire/blob/main/docs/ROADMAP.md)
