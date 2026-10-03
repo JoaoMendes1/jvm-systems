@@ -13,12 +13,12 @@ escrita não precisa — publicar por commit funciona.
 
 ## 📍 Status atual (03/10/2026)
 
-| Fase | Status |
-|---|---|
-| 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | ✅ Concluída |
+| Fase                        | Status                                                         |
+| --------------------------- | -------------------------------------------------------------- |
+| 1 · Fundação e deploy       | ✅ Concluída                                                    |
+| 2 · Páginas e conteúdo      | ✅ Concluída                                                    |
 | 3 · Acabamento e publicação | ✅ MVP no ar — pendente só a URL de privacidade no Google Cloud |
-| 4 · Painel de escrita | 💭 Pós-MVP |
+| 4 · Painel de escrita       | 💭 Pós-MVP                                                      |
 
 ---
 
@@ -82,9 +82,9 @@ escrita não precisa — publicar por commit funciona.
         dados pedida por e-mail;
   - [x] textos da home, do Sobre e da página de pílulas;
   - [x] descrição da home e imagem de compartilhamento (`public/og.png`).
-- [ ] Trocar a URL da política de privacidade no Google Cloud para
+- [x] Trocar a URL da política de privacidade no Google Cloud para
       `https://joaomendes.dev.br/privacidade`.
-- [ ] Link do site no GitHub, no LinkedIn e no currículo.
+- [x] Link do site no GitHub, no LinkedIn e no currículo.
 
 ---
 
@@ -116,8 +116,8 @@ O que falta decidir antes de virar issue:
       `status` do arquivo. Uma versão viva exigiria checar os serviços, o que traz de volta um
       servidor. Só vale se houver pergunta real que a versão estática não responde.
 - [ ] **Redirecionar `www.joaomendes.dev.br`** para o domínio sem `www`. Exige registro DNS novo.
-- [ ] **Feed RSS das pílulas.** Barato no Astro; só vale se alguém for assinar.
-- [ ] **Estudo de caso do Grimoire.**
+- [ ] **Feed RSS das pílulas.** Barato no Astro; só vale se alguém for assin
+- [x] **Estudo de caso do Grimoire.**
 - [ ] **Card do Lab de acessos**, quando o repositório existir.
 
 ### Avaliado e descartado (documentado pra não reabrir sem contexto)

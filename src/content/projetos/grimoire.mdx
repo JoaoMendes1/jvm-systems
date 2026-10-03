@@ -4,9 +4,98 @@ resumo: Dicionário de vocabulário inglês↔português, com flashcards e áudi
 status: no-ar
 url: https://grimoire.joaomendes.dev.br
 repo: https://github.com/JoaoMendes1/grimoire
-stack: [Go, chi, JavaScript, PWA, JWKS]
+stack: [Go, chi, PostgreSQL, JavaScript, PWA]
 papel: projeto pessoal
 visual: verde
 ordem: 2
 rascunho: false
 ---
+
+## O problema
+
+O Grimoire é um dicionário pessoal: guardo o termo em inglês, a tradução e o áudio, organizo por categoria e estudo com flashcards. Ele começou com SQLite, no próprio computador. Migrei para o Supabase quando precisei usar o mesmo vocabulário em aparelhos diferentes — e é por isso que ele é instalável como PWA.
+
+A parte que mais me ensinou foi a retomada. Depois de dois meses parado, reli o código inteiro e **descobri que o banco e o código discordavam sobre o schema, sem nenhum erro aparecendo.**
+
+## Três decisões e o que elas custaram
+
+<Decisao
+  titulo="Schema versionado em arquivos, não criado pelo Go no boot"
+  contexto="As tabelas eram criadas pelo próprio servidor a cada boot, com CREATE TABLE IF NOT EXISTS. Esse comando cria a tabela, mas nunca altera uma que já existe."
+  escolhi="Todo o DDL em arquivos numerados na pasta sql/, aplicados à mão no Supabase. O Go só conecta e confere se as tabelas existem."
+  descartei="Manter a criação no boot. Funcionava em banco vazio, mas qualquer mudança de coluna era ignorada em silêncio."
+  custo="Aplicar o SQL virou um passo manual, que precisa acontecer na ordem certa em relação ao deploy."
+/>
+
+<Decisao
+  titulo="Rate limit só nas rotas que falam com o Google"
+  contexto="Tradução e áudio passam pelo servidor e usam endpoints do Google que não são API pública. Um laço no frontend gastaria a cota e faria o Google bloquear o IP do servidor, derrubando a tradução para todo mundo."
+  escolhi="Limite por IP, de 2 requisições por segundo com picos de até 20, só em /api/translate e /api/audio."
+  descartei="Limitar todas as rotas. O cadastro de palavras e categorias só custa ao próprio banco e não precisava da mesma proteção."
+  custo="O controle fica em memória e zera a cada reinício, e pessoas atrás do mesmo IP dividem a mesma cota."
+/>
+
+<Decisao
+  titulo="Login só com Google, sem senha própria"
+  contexto="O app precisa saber de quem é cada palavra, e eu não queria guardar senha de ninguém."
+  escolhi="Login com Google pela autenticação do Supabase. O backend valida o token localmente, com a chave pública baixada no boot."
+  descartei="Cadastro com e-mail e senha, que traria recuperação de senha, política de senha e hash para proteger."
+  custo="Quem não tem conta Google não consegue entrar."
+/>
+
+## O trecho que vale ler
+
+É a função que substituiu a criação de tabelas no boot. O comentário conta o que deu errado antes dela.
+
+<Terminal arquivo="internal/database/db.go">
+
+```go
+// InitDB abre a conexão e confere se o schema esperado existe.
+//
+// Ele NÃO cria nem altera tabela. O schema vive em sql/, versionado e aplicado à
+// mão — ver sql/README.md. Até 19/09/2026 as tabelas eram criadas aqui com
+// CREATE TABLE IF NOT EXISTS, e isso escondeu uma divergência por semanas:
+// alguém alterou vocabularies.user_id para uuid no Supabase, o Go continuou
+// declarando TEXT, e o boot seguiu anunciando "schema verificado com sucesso".
+// IF NOT EXISTS cria, mas nunca altera.
+func InitDB() error {
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		return fmt.Errorf("variável de ambiente DATABASE_URL não foi definida")
+	}
+
+	var err error
+	DB, err = sql.Open("postgres", dbURL)
+	if err != nil {
+		return fmt.Errorf("falha ao conectar ao supabase: %w", err)
+	}
+
+	// sql.Open não conversa com o banco: ele só valida os argumentos. Sem o Ping,
+	// a primeira falha de conexão apareceria como erro de consulta no meio de uma
+	// requisição, com o servidor já no ar dizendo que subiu.
+	if err := DB.Ping(); err != nil {
+		return fmt.Errorf("banco não respondeu: %w", err)
+	}
+
+	if err := conferirSchema(); err != nil {
+		return err
+	}
+
+	fmt.Println("✅ Conexão e schema conferidos.")
+	return nil
+}
+```
+
+</Terminal>
+
+## O que quebrou
+
+| Sintoma | Causa e correção |
+|---|---|
+| **`user_id` com tipos diferentes no código e no banco, sem nenhum erro** | O Go declarava `TEXT`, e a coluna tinha sido alterada para `uuid` direto no Supabase. Como o boot só criava tabela que não existia, nunca percebeu. Passei o schema para `sql/` e alinhei as duas tabelas em `uuid`. |
+| **Variável de ambiente faltando aparecia como erro de banco** | A falha só surgia no meio de uma requisição. Hoje o servidor se recusa a subir se faltar qualquer uma das três variáveis obrigatórias. |
+| **Tradução falhando de vez em quando** | O endpoint principal do Google é instável. Acrescentei um segundo endpoint como alternativa: a falha virou lentidão em vez de erro. |
+
+## O que eu faria diferente
+
+Escreveria o schema em arquivos desde o primeiro dia, em vez de deixar o servidor criar as tabelas. E devolveria a falha do Google como 503, não como 500: hoje o log diz "erro interno" quando quem falhou foi o serviço externo.
