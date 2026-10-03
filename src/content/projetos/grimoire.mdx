@@ -1,6 +1,6 @@
 ---
 nome: Grimoire
-resumo: Dicionário de vocabulário inglês↔português, com flashcards e áudio. Instalável no celular como aplicativo (PWA).
+resumo: Dicionário pessoal de vocabulário inglês↔português, com tradução automática, áudio e flashcards. Instalável no celular como aplicativo (PWA).
 status: no-ar
 url: https://grimoire.joaomendes.dev.br
 repo: https://github.com/JoaoMendes1/grimoire
@@ -14,11 +14,49 @@ capa: /projetos/grimoire.webp
 capaAlt: Tela principal do Grimoire, com o formulário de novo registro à esquerda e a lista de palavras com categorias à direita.
 ---
 
-## O problema
+## O problema e o objetivo
 
-O Grimoire é um dicionário pessoal: guardo o termo em inglês, a tradução e o áudio, organizo por categoria e estudo com flashcards. Ele começou com SQLite, no próprio computador. Migrei para o Supabase quando precisei usar o mesmo vocabulário em aparelhos diferentes — e é por isso que ele é instalável como PWA.
+Eu anotava palavras em inglês e não tinha onde guardar o termo, a tradução e a pronúncia juntos. O Grimoire resolve isso: digito o termo, ele traduz sozinho, gera o áudio, e eu organizo por categoria e estudo com flashcards.
 
-A parte que mais me ensinou foi a retomada. Depois de dois meses parado, reli o código inteiro e **descobri que o banco e o código discordavam sobre o schema, sem nenhum erro aparecendo.**
+Começou com SQLite, no próprio computador. Migrei para o Supabase quando precisei usar o mesmo vocabulário em aparelhos diferentes — e por isso ele é instalável no celular como aplicativo.
+
+**Está em desenvolvimento.** Hoje é um caderno pessoal. O próximo passo é trocar a tradução por IA, e virar produto para outras pessoas ainda é uma decisão em aberto.
+
+## Como funciona
+
+| Peça | O que é |
+|---|---|
+| **Navegador** | HTML, CSS e JavaScript sem framework, com Tailwind. Um service worker torna o app instalável (PWA). |
+| **Servidor** | Go com chi. O mesmo binário serve os arquivos da tela e a API. |
+| **Login** | Google, pela autenticação do Supabase. O servidor valida o token localmente, com a chave pública baixada no boot. |
+| **Banco** | PostgreSQL no Supabase, acessado com SQL direto. O schema fica versionado em arquivos na pasta `sql/`. |
+| **Serviços externos** | Tradução e voz do Google. |
+| **Infra** | VPS com Docker e Caddy, e deploy a cada push na `main`. |
+
+O caminho de uma palavra nova:
+
+1. Digito o termo, e o navegador pede a tradução ao servidor, com o token de login.
+2. O servidor valida o token e confere o limite de requisições.
+3. Tenta o endpoint principal de tradução do Google. Se falhar, tenta o alternativo.
+4. Se o termo digitado estava em português, refaz a chamada no sentido contrário: **o inglês é sempre o termo principal**.
+5. Ao salvar, o servidor grava a palavra com o `user_id` do token. Toda consulta filtra por ele.
+
+## Integrações externas
+
+A tradução e o áudio vêm do Google, mas **não de uma API pública**: são endpoints internos, sem contrato e sem aviso de mudança. Usar isso exigiu decidir o que fazer quando eles falham.
+
+| O que | Como foi tratado |
+|---|---|
+| **Instabilidade** | O endpoint principal de tradução falha de vez em quando. Há um segundo endpoint como alternativa: a falha vira lentidão em vez de erro. |
+| **Bloqueio do IP** | Um laço no frontend podia esgotar a cota e fazer o Google bloquear o servidor, derrubando a tradução para todo mundo. Por isso as duas rotas que falam com o Google têm limite de requisições. |
+| **Texto longo no áudio** | A voz do Google não lida com texto longo. Acima de 200 caracteres, o servidor devolve o endereço vazio de propósito, e o navegador usa a voz nativa dele. |
+| **Risco que continua** | Qualquer um desses endpoints pode parar de responder num dia qualquer. É o motivo de a tradução estar planejada para sair do Google e ir para a IA. |
+
+## IA no projeto
+
+- **Planejado — tradução com o Gemini.** Substituir os endpoints internos do Google por uma API com contrato.
+- **Planejado — correção e contexto.** A IA corrige a grafia do termo em inglês, traduz e escreve uma frase de exemplo antes de salvar.
+- **Planejado — frase de origem.** Guardar onde a palavra foi encontrada: palavra solta se esquece, palavra com contexto fica.
 
 ## Três decisões e o que elas custaram
 
@@ -95,10 +133,28 @@ func InitDB() error {
 
 | Sintoma | Causa e correção |
 |---|---|
-| **`user_id` com tipos diferentes no código e no banco, sem nenhum erro** | O Go declarava `TEXT`, e a coluna tinha sido alterada para `uuid` direto no Supabase. Como o boot só criava tabela que não existia, nunca percebeu. Passei o schema para `sql/` e alinhei as duas tabelas em `uuid`. |
+| **`user_id` com tipos diferentes no código e no banco, sem nenhum erro (19/09)** | O Go declarava `TEXT`, e a coluna tinha sido alterada para `uuid` direto no Supabase. Como o boot só criava tabela que não existia, nunca percebeu. Passei o schema para `sql/` e alinhei as duas tabelas em `uuid`. |
 | **Variável de ambiente faltando aparecia como erro de banco** | A falha só surgia no meio de uma requisição. Hoje o servidor se recusa a subir se faltar qualquer uma das três variáveis obrigatórias. |
 | **Tradução falhando de vez em quando** | O endpoint principal do Google é instável. Acrescentei um segundo endpoint como alternativa: a falha virou lentidão em vez de erro. |
+| **Texto do usuário direto no HTML** | Termo e tradução são texto livre e iam para a tela sem tratamento, abrindo espaço para XSS. Todo texto do usuário passou a ser escapado antes de aparecer. |
 
-## O que eu faria diferente
+## Conceitos que aprendi
 
-Escreveria o schema em arquivos desde o primeiro dia, em vez de deixar o servidor criar as tabelas. E devolveria a falha do Google como 503, não como 500: hoje o log diz "erro interno" quando quem falhou foi o serviço externo.
+| Conceito | O que é | Onde está |
+|---|---|---|
+| **Fail-fast** | Recusar subir quando falta configuração, em vez de falhar depois, no meio de uma requisição. | `cmd/web/main.go` |
+| **JWKS** | Endereço com as chaves públicas que validam um JWT sem chamar o servidor de login a cada requisição. | `internal/middleware/auth.go` |
+| **Token bucket** | Limitador que libera requisições num ritmo fixo e guarda uma reserva para picos. | `internal/middleware/rate_limit.go` |
+| **Schema versionado** | Cada mudança no banco vira um arquivo numerado, aplicado em ordem e nunca editado depois. | `sql/` |
+| **RLS** | Regra no próprio Postgres que decide quais linhas cada usuário vê. Aqui ela protege o acesso pela API do Supabase; a conexão do servidor ignora RLS, e o isolamento dela vem do filtro por `user_id`. | `sql/002_rls_policies.sql` |
+| **XSS** | Texto digitado pelo usuário sendo interpretado como código na página. Evitado escapando o texto antes de exibir. | `static/app.js` |
+| **PWA** | Site que o celular instala como aplicativo, com ícone e tela cheia. | `static/manifest.json` e `static/sw.js` |
+
+## Em andamento
+
+- Tradução com o Gemini, com correção e frase de exemplo
+- Falha do Google devolvida como 503, e não como erro interno 500
+- Limite de requisições por usuário, e não por IP
+- Primeiros testes nas funções puras de tradução
+- Depois da IA: app Android com captura por cima de jogos, e repetição espaçada com estatísticas de estudo
+- O plano completo está no [roadmap do projeto](https://github.com/JoaoMendes1/grimoire/blob/main/docs/ROADMAP.md)

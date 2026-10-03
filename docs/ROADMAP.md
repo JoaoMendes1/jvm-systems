@@ -102,7 +102,7 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
       andamento. (#12)
 - [x] Estudo de caso do AniDeck no modelo v2. (#12)
 - [x] Ícone da aba, captura de tela nos cards e estágio de cada projeto (`fase`). (#12)
-- [ ] Estudo de caso do Grimoire no modelo v2.
+- [x] Estudo de caso do Grimoire no modelo v2.
 - [ ] Pílulas tiradas das issues: filtro no campo errado da AniList, Gemini com busca e JSON,
       RAG × SQL.
 - [ ] Certificados no Sobre, com link para a credencial.
