@@ -76,7 +76,7 @@ if data, _, err := database.Client.From("app_settings").
 
 | Sintoma | Causa e correção |
 |---|---|
-| **Primeiro acesso do dia levava quase um minuto** | Hibernação do free tier. Migrei para VPS própria, com container sempre de pé. |
+| **Primeiro acesso do dia demorava** | Hibernação do free tier. Migrei para VPS própria, com container sempre de pé. |
 | **Quota da API externa estourando em dia de desenvolvimento** | Eu batia na API real rodando local. Criei um cliente falso atrás da mesma interface, ligado por variável de ambiente. |
 | **Kill switch que se desligava sozinho a cada hibernação** | Estado só em memória. Passou a ser persistido e relido no boot. |
 

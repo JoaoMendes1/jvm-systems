@@ -11,13 +11,13 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.** O painel de
 escrita não precisa — publicar por commit funciona.
 
-## 📍 Status atual (02/10/2026)
+## 📍 Status atual (03/10/2026)
 
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
-| 2 · Páginas e conteúdo | ✅ Concluída — revisão de conteúdo movida para o fim da Fase 3 |
-| 3 · Acabamento e publicação | 🚧 Em andamento |
+| 2 · Páginas e conteúdo | ✅ Concluída |
+| 3 · Acabamento e publicação | ✅ MVP no ar — pendente só a URL de privacidade no Google Cloud |
 | 4 · Painel de escrita | 💭 Pós-MVP |
 
 ---
@@ -59,41 +59,31 @@ escrita não precisa — publicar por commit funciona.
       `/pilulas/[slug]`. Filtros derivados das tags em uso, nunca lista fixa. (#7)
 - [x] **Sobre:** trajetória e ferramental, com a barra de navegação. (#6)
 - [x] **Privacidade:** `/privacidade`. Cobre o site (sem cookies, sem analytics) e o app OAuth do
-      Google usado pelo backup, que hoje aponta a política para o Grimoire. (#9)
+      Google usado pelo backup. (#9)
 - [x] Página 404, servida pelo Caddy do container com status 404. (#9)
 - [x] **Conteúdo mínimo para o MVP:** estudo de caso do AniDeck (#8) + a primeira pílula
-      ("O free tier hiberna, e o seu estado em memória some junto") (#7), ambos com texto
-      provisório.
+      ("O free tier hiberna, e o seu estado em memória some junto") (#7).
 - [x] **Preencher o que a v4 do protótipo deixou em aberto de propósito:**
   - [x] contagens do hero (serviços no ar, pílulas) → calculadas no build a partir das coleções;
         stat com valor zero não aparece; (#5)
   - [x] trecho de código do Kill Switch → copiado do `cmd/web/main.go` real; (#8)
   - [x] endereço de e-mail e link do LinkedIn → no componente `Contato`. (#5)
 
-> Os itens que dependiam de fato confirmado — a data `desde` do AniDeck e a conferência do texto
-> do estudo de caso contra o repositório — seguiram para a revisão de conteúdo, no fim da Fase 3.
-
 ## ✨ Fase 3: Acabamento e publicação — fim do MVP
 
 - [x] Metadados por página: `title`, `description`, URL canônica e imagem de Open Graph. (#10)
 - [x] `sitemap.xml` e `robots.txt`. (#10)
-- [ ] Teste real no celular, no mesmo espírito da Fase 3 do AniDeck.
-- [ ] Acessibilidade: navegação por teclado, contraste, `prefers-reduced-motion` respeitado em
-      toda animação.
+- [x] Teste real no celular, no mesmo espírito da Fase 3 do AniDeck.
+- [x] **Revisão de conteúdo:**
+  - [x] primeira pílula: data e fatos alinhados ao comentário do `cmd/web/main.go` (o painel
+        mostrava o interruptor "ligado");
+  - [x] estudo de caso do AniDeck: tirado o "quase um minuto", que não tinha medição;
+  - [x] política de privacidade: Grimoire coberto pela política do portfólio, com exclusão de
+        dados pedida por e-mail;
+  - [x] textos da home, do Sobre e da página de pílulas;
+  - [x] descrição da home e imagem de compartilhamento (`public/og.png`).
 - [ ] Trocar a URL da política de privacidade no Google Cloud para
       `https://joaomendes.dev.br/privacidade`.
-- [ ] **Revisão de conteúdo — por último, antes de divulgar o link.** Todo texto escrito durante
-      o porte é provisório e é revisado de uma vez aqui, com os fatos confirmados:
-  - [ ] primeira pílula: `data` (dia em que o texto foi escrito) e fatos da história — o
-        texto diz que o painel mostrava "desligado", mas o comentário do `cmd/web/main.go`
-        diz que ele mostraria "ligado";
-  - [ ] estudo de caso do AniDeck: cada afirmação conferida contra o repositório, incluindo o
-        "quase um minuto" do primeiro acesso, que hoje não tem medição;
-  - [ ] data de entrada em produção do AniDeck → campo `desde` do arquivo do projeto;
-  - [ ] política de privacidade: fatos do Grimoire (que dados guarda, como apagar a conta) e se
-        a política do AniDeck menciona o backup no Google Drive;
-  - [ ] textos da home, do Sobre e da página de pílulas;
-  - [ ] descrição de cada página e o texto da imagem de compartilhamento (`public/og.png`).
 - [ ] Link do site no GitHub, no LinkedIn e no currículo.
 
 ---
