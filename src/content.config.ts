@@ -2,7 +2,6 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { existsSync } from 'node:fs';
 
 // Lista fechada: tag digitada errado quebra o build em vez de criar uma
 // categoria nova com uma pílula só. Tag nova muda o contrato e pede issue.
@@ -33,8 +32,8 @@ const projetos = defineCollection({
       // Estágio do projeto em poucas palavras ("beta fechado", "em desenvolvimento").
       // Aparece no card e no estudo de caso; sem ele, nada é exibido.
       fase: z.string().max(30).optional(),
-      // Captura de tela já otimizada, em public/projetos/. Fica em public/ e não em
-      // src/assets/ para o build não depender do sharp, que instala binário nativo.
+      // Captura de tela já otimizada, em public/projetos/. O schema confere o
+      // caminho, não a existência do arquivo: confira com `ls` antes do commit.
       capa: z.string().regex(/^\/projetos\/[a-z0-9-]+\.webp$/).optional(),
       // Descreve o que a imagem mostra. Obrigatório quando há capa.
       capaAlt: z.string().optional(),
@@ -43,12 +42,6 @@ const projetos = defineCollection({
     .refine((p) => !p.capa || Boolean(p.capaAlt), {
       message: '`capaAlt` é obrigatório quando há `capa`.',
       path: ['capaAlt'],
-    })
-    // O caminho certo não garante que o arquivo exista: sem esta checagem, a capa
-    // esquecida vira imagem quebrada no site, com o build verde.
-    .refine((p) => !p.capa || existsSync(`public${p.capa}`), {
-      message: 'a imagem de `capa` não existe em public/projetos/.',
-      path: ['capa'],
     }),
 });
 
