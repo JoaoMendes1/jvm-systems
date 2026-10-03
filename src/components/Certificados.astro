@@ -1,0 +1,65 @@
+---
+// Certificados concluídos, cada um com o link de verificação do emissor.
+// Curso em andamento não entra aqui: fica em "Estudando agora", sem link.
+// As datas são texto fixo, não Date: não passam pela armadilha do fuso.
+const CERTIFICADOS = [
+  {
+    nome: 'Introdução ao Go',
+    emissor: 'Rocketseat',
+    data: 'abr 2026',
+    url: 'https://app.rocketseat.com.br/certificates/05c142a1-cb20-4ac3-bb63-574417d24d11',
+  },
+  {
+    nome: 'O básico de Git e GitHub',
+    emissor: 'Rocketseat',
+    data: 'mar 2025',
+    url: 'https://app.rocketseat.com.br/certificates/2f7b2219-6034-4f8c-802f-6347c8d7be1c',
+  },
+];
+---
+<section class="certificados">
+  <h2>Certificados</h2>
+  <ul>
+    {CERTIFICADOS.map((c) => (
+      <li>
+        <span class="data">{c.data}</span>
+        <span class="nome"><b>{c.nome}</b> · {c.emissor}</span>
+        <a href={c.url} target="_blank" rel="noopener noreferrer">ver credencial ↗</a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .certificados { padding-top: 60px; }
+  ul { list-style: none; margin: 12px 0 0; padding: 0; font-size: 14.5px; }
+  li {
+    display: grid;
+    grid-template-columns: 26% 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .data {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--fg3);
+    letter-spacing: .07em;
+  }
+  .nome { color: var(--fg2); }
+  .nome b { color: var(--fg); font-weight: 500; }
+  a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--acc);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  a:hover { text-decoration: underline; }
+
+  /* No celular, data em cima, nome e link embaixo. */
+  @media (max-width: 620px) {
+    li { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
