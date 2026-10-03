@@ -2,6 +2,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { existsSync } from 'node:fs';
 
 // Lista fechada: tag digitada errado quebra o build em vez de criar uma
 // categoria nova com uma pílula só. Tag nova muda o contrato e pede issue.
@@ -42,6 +43,12 @@ const projetos = defineCollection({
     .refine((p) => !p.capa || Boolean(p.capaAlt), {
       message: '`capaAlt` é obrigatório quando há `capa`.',
       path: ['capaAlt'],
+    })
+    // O caminho certo não garante que o arquivo exista: sem esta checagem, a capa
+    // esquecida vira imagem quebrada no site, com o build verde.
+    .refine((p) => !p.capa || existsSync(`public${p.capa}`), {
+      message: 'a imagem de `capa` não existe em public/projetos/.',
+      path: ['capa'],
     }),
 });
 
