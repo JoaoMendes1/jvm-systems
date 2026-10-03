@@ -97,10 +97,11 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
 
 - [x] **Textos novos** no hero, no Sobre e no contato, e a seção "Competências, com prova",
       com cada item apontando para o projeto onde está implementado. (#11)
-- [ ] **Modelo de estudo de caso v2** no `docs/CONTEUDO.md`: problema, como funciona,
+- [x] **Modelo de estudo de caso v2** no `docs/CONTEUDO.md`: problema, como funciona,
       integrações externas, IA no projeto, decisões, código, o que quebrou, conceitos e em
-      andamento.
-- [ ] Estudo de caso do AniDeck no modelo v2.
+      andamento. (#12)
+- [x] Estudo de caso do AniDeck no modelo v2. (#12)
+- [x] Ícone da aba, captura de tela nos cards e estágio de cada projeto (`fase`). (#12)
 - [ ] Estudo de caso do Grimoire no modelo v2.
 - [ ] Pílulas tiradas das issues: filtro no campo errado da AniList, Gemini com busca e JSON,
       RAG × SQL.

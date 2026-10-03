@@ -84,6 +84,9 @@ desde: 2026-07-01             # data em que entrou no ar — ver armadilha de da
 visual: laranja               # laranja | verde | violeta | neutro
 ordem: 1                      # menor aparece primeiro
 rascunho: false
+fase: beta fechado            # opcional: estágio em poucas palavras
+capa: /projetos/projeto.webp  # opcional: captura de tela em public/projetos/
+capaAlt: O que a imagem mostra.
 ---
 ```
 
@@ -100,6 +103,9 @@ rascunho: false
 | `visual` | não | padrão `neutro` |
 | `ordem` | sim | inteiro |
 | `rascunho` | não | padrão `false` |
+| `fase` | não | até 30 caracteres; aparece no card e no estudo de caso |
+| `capa` | não | caminho `/projetos/<nome>.webp`, arquivo em `public/projetos/` |
+| `capaAlt` | só com `capa` | descreve o que a imagem mostra; o build recusa capa sem ele |
 
 ### Onde o projeto aparece
 
@@ -118,17 +124,25 @@ o site não afirma nada que não exista.
 aparece no site sozinho no dia em que ganhar `repo` e deixar de ser rascunho — nenhum componente
 precisa mudar.
 
-### Corpo do estudo de caso
+### Corpo do estudo de caso (modelo v2)
 
-Sugestão de estrutura, a do protótipo:
+O estudo de caso mostra como o projeto funciona por dentro, para quem avalia e para quem
+escreve: cada seção obriga a explicar o porquê. Cada `##` vira um item do sumário lateral,
+gerado sozinho.
 
-1. **Contexto** — o problema, em termos de quem usa.
-2. **Arquitetura** — decisões, cada uma com o componente `Decisao`.
-3. **Código** — um trecho que valha ler, com o componente `Terminal`, **copiado do arquivo real**.
-4. **Produção** — o que quebrou, em tabela sintoma × causa e correção.
-5. **Retrospectiva** — o que faria diferente.
+| # | Seção | O que entra |
+|---|---|---|
+| 1 | **O problema e o objetivo** | Para quem é, o que resolve e em que estágio está |
+| 2 | **Como funciona** | Tabela das peças (navegador, servidor, banco, serviços externos, infra) e o caminho de uma requisição, em passos numerados |
+| 3 | **Integrações externas** | O que foi preciso entender de cada API: autenticação, paginação, limite de requisições e o que acontece quando ela cai |
+| 4 | **IA no projeto** | O que está no ar, o que está em andamento (com link para a issue) e o que está planejado |
+| 5 | **Decisões** | Componente `Decisao`, com o custo de cada uma |
+| 6 | **O trecho que vale ler** | Componente `Terminal`, **copiado do arquivo real** |
+| 7 | **O que quebrou** | Tabela sintoma × causa e correção, com data |
+| 8 | **Conceitos que aprendi** | Tabela conceito × o que é × onde está no código |
+| 9 | **Em andamento** | Issues abertas, com link |
 
-O sumário lateral é gerado a partir dos títulos `##`. Não se escreve à mão.
+Seção que não se aplica ao projeto fica de fora: projeto sem IA não tem a seção 4.
 
 ### Componentes disponíveis no MDX
 
@@ -238,7 +252,9 @@ página é escrita. Se precisar encurtar, corte linhas inteiras e marque o corte
 
 ## Imagens
 
-- Ficam em `src/assets/`, para o Astro otimizar no build.
+- **Capa de projeto** fica em `public/projetos/`, já otimizada: WebP com até 1200 px de largura.
+  Fica em `public/` para o build não depender do `sharp`, que instala binário nativo.
+- Imagem dentro do texto fica em `src/assets/`, para o Astro otimizar no build.
 - `alt` é obrigatório e descreve o que a imagem mostra, não o que ela é ("gráfico de quadrantes
   do Meu Gosto", não "imagem").
 - Não usar imagem hospedada em outro domínio: se ela sumir, some do site sem aviso.

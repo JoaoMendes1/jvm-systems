@@ -1,28 +1,74 @@
 ---
 nome: AniDeck
-resumo: Organizador pessoal de animes, com lista, progresso por episódio e estatísticas. A parte mais difícil foi depender de uma API externa que sai do ar com frequência.
+resumo: Organizador pessoal de animes, com lista, progresso por episódio, calendário e estatísticas. Está em beta fechado, com o objetivo de ter usuários reais, sem fins lucrativos.
 status: no-ar
 url: https://anideck.joaomendes.dev.br
 repo: https://github.com/JoaoMendes1/anideck
-stack: [Go, chi, React 19, PostgreSQL, RLS]
+stack: [Go, chi, React 19, TypeScript, PostgreSQL, Gemini]
 papel: projeto pessoal
 visual: laranja
 ordem: 1
 rascunho: false
+fase: beta fechado
+capa: /projetos/anideck.webp
+capaAlt: Página inicial do AniDeck, com o título "Todo anime que importa, guardado do seu jeito" e um card de anime em destaque.
 ---
 
-## O problema
+## O problema e o objetivo
 
-Eu queria uma lista que mostrasse o que já assisti, o que está pela metade e o que quero ver, atualizada sozinha. Os dados de catálogo vêm de uma API pública, a AniList, que tem limite de uso e já ficou fora do ar várias vezes. **Boa parte do projeto foi aprender a não depender dela.**
+Eu queria um lugar para organizar o que assisto: lista com status e nota, progresso por episódio, calendário de lançamentos e estatísticas do meu gosto. Os dados de catálogo vêm de uma API pública, e foi aí que esteve a parte mais difícil.
+
+**O AniDeck está em beta fechado, e o objetivo não é lucro.** É ter usuários reais e aprender como uma aplicação se comporta quando quem usa não é o autor: cadastro, isolamento de dados entre contas, exclusão de conta e backup. O cadastro tem limite automático, e a política de privacidade é pública.
+
+## Como funciona
+
+| Peça | O que é |
+|---|---|
+| **Navegador** | React 19 com TypeScript, Vite e Tailwind. Instalável no celular como aplicativo (PWA). |
+| **Servidor** | Go com chi. O mesmo binário serve a API e os arquivos do React. |
+| **Banco** | PostgreSQL no Supabase, com RLS nas tabelas de usuário. O schema fica versionado em arquivos na pasta `sql/`. |
+| **Catálogo** | A AniList, uma API GraphQL pública, mais o catálogo próprio que monto por curadoria. |
+| **IA** | Gemini, para reescrever sinopses e sugerir o que curar. |
+| **Infra** | VPS com Docker e Caddy, deploy a cada push na `main` e backup diário do banco. |
+
+O caminho de uma busca, do teclado até a tela:
+
+1. Você digita, e o React espera uma pausa curta antes de chamar a API, para não disparar uma requisição a cada tecla.
+2. O Go consulta primeiro o catálogo próprio.
+3. Se o Kill Switch estiver desligado, consulta também a AniList, respeitando o limite de requisições dela.
+4. Junta os dois resultados. O que foi curado tem precedência, campo a campo.
+5. Se a AniList não responder, a página mostra o que o catálogo próprio tem, em vez de quebrar.
+
+## A API da AniList
+
+É a fonte do catálogo: uma API GraphQL pública, mantida pela comunidade. Usar bem exigiu entender cinco coisas:
+
+| O que | Por que importou |
+|---|---|
+| **GraphQL** | Uma requisição só pede exatamente os campos de que a tela precisa: título, capa, episódios, próximo episódio e onde assistir. |
+| **Limite de requisições** | Caiu de 90 para 30 por minuto quando o serviço ficou instável. O cliente em Go tem um limitador próprio e, quando recebe 429, espera o tempo que a AniList pede no cabeçalho `Retry-After`. |
+| **Paginação** | A resposta vem em páginas. Ler só a primeira esgotava o scan do Olheiro em semanas: o filtro do que já foi visto precisa ficar dentro do laço de páginas. |
+| **Gênero × tag** | `genre_in` e `tag_in` são listas diferentes. O termo na lista errada devolve lista vazia, com status 200, sem nenhum erro. |
+| **Termos de uso** | Proíbem copiar a base em massa. O catálogo próprio cresce por curadoria, anime a anime, e não clonando a AniList. |
+
+**E ela cai.** O Jikan, a API que eu usava no começo, anunciou o encerramento e começou a falhar: migrei tudo para a AniList em 28/07. Em 22/08, a própria AniList desligou a API inteira com 403, e o app ficou fora do ar. Daí veio a mudança principal do projeto: **a AniList deixou de ser o motor e virou a fábrica de peças.** Ela é usada no Painel para importar, e o que está gravado passa a ser a fonte de verdade.
+
+## IA no projeto
+
+- **No ar — reescrita de sinopse.** No Painel, a sinopse da AniList é reescrita pelo Gemini no tom do AniDeck. O prompt fica numa tabela e é editado pela tela, sem deploy. Se um modelo falha, o código tenta o próximo da lista.
+- **No ar — Agente Olheiro.** Cruza o perfil de gosto com os animes em alta na AniList e monta uma fila de sugestões de curadoria. Ele sugere; quem decide sou eu, numa tela de revisão. A função de pontuação é pura e tem testes.
+- **Em andamento — fila com worker ([#114](https://github.com/JoaoMendes1/anideck/issues/114)).** Marcar vários animes e deixar um processo separado gerar sinopse e tags, com aprovação depois.
+- **Em andamento — episódios e datas com fonte ([#115](https://github.com/JoaoMendes1/anideck/issues/115)).** Aqui o modelo precisa buscar na web, e a API do Gemini recusa busca e resposta em JSON na mesma chamada: são duas chamadas por anime. Nada é gravado sem revisão, porque sem fonte o modelo inventa a data, e data errada quebra o calendário sem erro nenhum.
+- **Planejado — RAG.** Busca por significado nas sinopses ("parecidos com este") e nas próprias docs do projeto, com embeddings no `pgvector`. O que é dado estruturado fica fora: "quantos Isekai eu tenho" é um `SELECT`, não uma busca por similaridade.
 
 ## Três decisões e o que elas custaram
 
 <Decisao
-  titulo="Validar JWT por JWKS, não por segredo compartilhado"
-  contexto="O login é do Supabase; o backend em Go precisa confiar no token sem chamar o Supabase a cada request."
-  escolhi="Buscar a chave pública via JWKS e validar o token no próprio backend."
-  descartei="Validar com um segredo compartilhado. Funcionava, mas o mesmo segredo precisaria existir em todo serviço que lê o token, e trocá-lo seria manual."
-  custo="Uma dependência a mais: se o endereço das chaves não responder, o login deixa de funcionar."
+  titulo="O catálogo próprio é a fonte de verdade, e a AniList só abastece"
+  contexto="Em 22/08 a AniList desligou a API, e Rankings, Busca, Deck e Detalhes caíram juntos. Toda página dependia dela ao vivo."
+  escolhi="Curadoria gravada no banco, com precedência campo a campo sobre o que a AniList devolve. A AniList passa a ser usada no Painel, para importar."
+  descartei="Continuar consultando ao vivo, só com um cache na frente. O cache guarda poucos campos, e episódios, datas e onde assistir continuariam reféns."
+  custo="Curar dá trabalho, anime a anime. Em 12/09, só 1 de 114 animes curados estava totalmente independente da AniList — é o que a fila com IA vem resolver."
 />
 
 <Decisao
@@ -30,44 +76,58 @@ Eu queria uma lista que mostrasse o que já assisti, o que está pela metade e o
   contexto="Todo dado é pessoal. Um filtro por usuário esquecido em um handler vaza a lista de outra pessoa."
   escolhi="Row Level Security no PostgreSQL, amarrado à identidade do token. O banco recusa o que o handler deixar passar."
   descartei="Confiar só no código da aplicação. É mais rápido de escrever, mas um filtro esquecido vira vazamento sem nenhum aviso."
-  custo="Cada tabela precisa da sua regra, e entender por que “uma linha sumiu” leva mais tempo no começo."
+  custo="Cada tabela precisa da sua regra, e view no Postgres não herda a RLS da tabela: isso já vazou uma vez, no teste, antes de ser corrigido."
 />
 
 <Decisao
-  titulo="Um interruptor para desligar a API externa, persistido no banco"
-  contexto="Quando a AniList fica instável ou o limite de uso estoura, preciso parar de consultá-la sem ter que fazer deploy."
-  escolhi="Flag em memória para ser instantânea, espelhada no banco e relida no boot."
-  descartei="Deixar só em memória. A hospedagem gratuita que eu usava desligava o serviço sem tráfego, e a cada religada o interruptor voltava ao padrão."
-  custo="Uma leitura a mais ao iniciar, e o mesmo valor guardado em dois lugares, que precisam ficar iguais."
+  titulo="A IA sugere; quem decide é uma pessoa"
+  contexto="Modelo de linguagem sem fonte inventa com confiança. Uma data de estreia errada não dá erro: só aparece errada no calendário."
+  escolhi="Tudo que a IA produz passa por uma fila de revisão. Os campos factuais, como episódios e datas, nunca são gravados direto."
+  descartei="Aplicar automaticamente o que o modelo devolve. Seria mais rápido, e o erro só apareceria para quem usa."
+  custo="Revisar leva tempo, e a curadoria anda no ritmo de quem revisa."
 />
 
 ## O trecho que vale ler
 
-Um trecho real do projeto: é ele que relê o interruptor no boot. O comentário explica o porquê.
+É o tratamento do limite da AniList. O limitador próprio libera 1,5 requisição por segundo, o mesmo ritmo dos 90 por minuto que a AniList aceitava. Quando ela caiu para 30, foi este trecho que impediu as sincronizações em lote de morrer no meio.
 
-<Terminal arquivo="cmd/web/main.go">
+<Terminal arquivo="internal/anilist/client.go">
 
 ```go
-// O Kill Switch vive em memória para ser instantâneo, mas é gravado em app_settings
-// para sobreviver a um restart. Sem esta leitura ele voltaria a false toda vez que o
-// serviço subisse — e no free tier do Render isso acontece a cada hibernação, então
-// o painel mostraria "ligado" enquanto o backend já estaria consultando a AniList.
-if data, _, err := database.Client.From("app_settings").
-	Select("value", "exact", false).
-	Eq("key", "anilist_force_offline").
-	Execute(); err == nil {
-	var linhas []struct {
-		Value string `json:"value"`
-	}
-	if err := json.Unmarshal(data, &linhas); err == nil && len(linhas) > 0 {
-		if linhas[0].Value == "true" {
-			anilist.SetForceOffline(true)
-			log.Println("[BOOT] Kill Switch estava ativo: AniList em modo offline forçado.")
+// maxTentativas limita o reenvio após 429. Três é suficiente para atravessar a janela de
+// um minuto do limite da AniList sem transformar uma indisponibilidade real em espera longa.
+const maxTentativas = 3
+
+// esperaPadraoRateLimit é usada quando a AniList devolve 429 sem o cabeçalho Retry-After.
+// Um minuto é a janela do limite deles, então é o menor tempo que garante a reabertura.
+const esperaPadraoRateLimit = 60 * time.Second
+
+// ...
+
+		// 429 não é erro do nosso lado: é a AniList pedindo para esperar. Sem tratar isso,
+		// uma sincronização em lote morria silenciosamente no meio — o limite deles cai
+		// para 30 requisições por minuto quando o serviço está degradado, bem abaixo do
+		// ritmo que o nosso limiter permite.
+		if resp.StatusCode == http.StatusTooManyRequests {
+			StateMutex.Lock()
+			ApiHealth = "WARNING"
+			StateMutex.Unlock()
+
+			espera := parseRetryAfter(resp.Header.Get("Retry-After"), esperaPadraoRateLimit)
+			resp.Body.Close()
+
+			if tentativa >= maxTentativas {
+				return fmt.Errorf("AniList recusou por excesso de requisições após %d tentativas", tentativa)
+			}
+
+			log.Printf("[ANILIST] Limite de requisições atingido; aguardando %s antes da tentativa %d", espera, tentativa+1)
+			select {
+			case <-time.After(espera):
+				continue
+			case <-ctx.Done():
+				return ctx.Err()
+			}
 		}
-	}
-} else {
-	log.Printf("[BOOT] Não foi possível ler o estado do Kill Switch: %v", err)
-}
 ```
 
 </Terminal>
@@ -76,10 +136,30 @@ if data, _, err := database.Client.From("app_settings").
 
 | Sintoma | Causa e correção |
 |---|---|
-| **Primeiro acesso do dia demorava** | Hibernação do free tier. Migrei para VPS própria, com container sempre de pé. |
-| **Quota da API externa estourando em dia de desenvolvimento** | Eu batia na API real rodando local. Criei um cliente falso atrás da mesma interface, ligado por variável de ambiente. |
-| **Kill switch que se desligava sozinho a cada hibernação** | Estado só em memória. Passou a ser persistido e relido no boot. |
+| **O Jikan anunciou o encerramento (28/07)** | Migração de emergência para a AniList. O Go virou um adaptador que devolvia o mesmo JSON de antes, e o frontend e o banco não precisaram mudar. |
+| **A AniList desligou a API (22/08)** | Rankings, Busca, Deck e Detalhes caíram juntos. Vieram o Kill Switch, a cadeia de fallback e o catálogo próprio. |
+| **Estatísticas com dados de dois usuários (20/08)** | Encontrado em teste: uma view no Postgres não herda a RLS da tabela. Primeiro um filtro explícito em cada view; depois `security_invoker` em todas elas, para a RLS voltar a valer. |
+| **Kill Switch que se desligava sozinho** | Estado só em memória, perdido a cada hibernação do free tier. Passou a ser gravado no banco e relido no boot. |
+| **Rota interna sem proteção (22/09)** | O segredo do agendador era exigido no boot e nunca conferido na rota. Virou a primeira checagem do handler, que responde 401 sem ele. |
 
-## O que eu faria diferente
+## Conceitos que aprendi
 
-Escreveria testes para a integração com a AniList desde o começo. E guardaria as alterações do banco em arquivos no repositório desde o primeiro dia, em vez de fazê-las direto no painel do Supabase — só passei a fazer isso no meio do projeto.
+| Conceito | O que é | Onde está |
+|---|---|---|
+| **GraphQL** | Linguagem de consulta em que o cliente pede exatamente os campos que quer, numa requisição só. | `internal/anilist/` |
+| **Token bucket** | Limitador que libera requisições num ritmo fixo e guarda uma pequena reserva para picos. | `rate.NewLimiter` no cliente da AniList |
+| **HTTP 429 e `Retry-After`** | A resposta de "vá mais devagar": o servidor diz quantos segundos esperar antes de tentar de novo. | `gqlRequest` |
+| **RLS** | Regra no próprio Postgres que decide quais linhas cada usuário pode ver e alterar. | `sql/` |
+| **JWKS** | Endereço com as chaves públicas que validam um JWT sem chamar o servidor de login a cada requisição. | `internal/middleware/auth.go` |
+| **Kill switch** | Interruptor que corta uma dependência externa sem precisar de deploy. | `app_settings` e `cmd/web/main.go` |
+| **Prompt como dado** | A instrução do modelo fica no banco e é editada pela tela, sem mudar código. | `internal/handlers/curation_ai.go` |
+| **Média bayesiana** | Nota ajustada pelo número de votos, para um anime com três votos 10 não passar à frente de um com milhares. | `internal/handlers/ranking.go` |
+| **Embeddings e RAG** *(estudando)* | Texto representado como vetor, para buscar por significado e entregar ao modelo só o trecho relevante. | Planejado |
+
+## Em andamento
+
+- [#114](https://github.com/JoaoMendes1/anideck/issues/114) — fila de curadoria com worker e tela de revisão
+- [#115](https://github.com/JoaoMendes1/anideck/issues/115) — episódios, datas e horários com fonte citada
+- [#105](https://github.com/JoaoMendes1/anideck/issues/105) — formulário de reporte de bug na aba Ajuda
+- [#128](https://github.com/JoaoMendes1/anideck/issues/128) — carregamento mais rápido da primeira tela e compressão no servidor
+- Depois: RAG e busca por significado

@@ -18,19 +18,22 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { projeto } = Astro.props;
 const { Content, headings } = await render(projeto);
-const { nome, resumo, status, url, repo, stack, papel } = projeto.data;
+const { nome, resumo, status, url, repo, stack, papel, fase, capa, capaAlt } = projeto.data;
 
 // Sumário gerado dos títulos ## do MDX: renomear um título já atualiza o sumário.
 const sumario = headings.filter((h) => h.depth === 2);
 
 // "https://anideck.joaomendes.dev.br" vira "anideck.joaomendes.dev.br".
 const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
+
+// Rótulo do topo: onde o projeto está ("no ar") e, se houver, em que estágio.
+const estado = [status === 'no-ar' ? 'no ar' : 'em construção', fase].filter(Boolean).join(' · ');
 ---
 <Base title={`${nome} — estudo de caso`} description={resumo} type="article">
   <a class="voltar" href="/#projetos">← vitrine</a>
 
   <header class="cabeca">
-    <p class="eyebrow">{status === 'no-ar' ? 'em produção' : 'em construção'}</p>
+    <p class="eyebrow">{estado}</p>
     <h1 class="titulo">{nome}</h1>
     <p class="lede abertura">{resumo}</p>
     <ul class="fatos">
@@ -39,6 +42,11 @@ const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
       {url && <li>no ar · <a href={url} target="_blank" rel="noopener noreferrer">{semProtocolo(url)}</a></li>}
       {repo && <li>código · <a href={repo} target="_blank" rel="noopener noreferrer">{semProtocolo(repo)}</a></li>}
     </ul>
+    {capa && (
+      <figure class="tela">
+        <img src={capa} alt={capaAlt} width="1200" height="800" decoding="async" />
+      </figure>
+    )}
   </header>
 
   <div class="caso">
@@ -65,6 +73,10 @@ const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
   .fatos b { color: var(--fg); font-weight: 500; }
   .fatos a { color: var(--acc); }
 
+  /* Captura de tela do projeto, com moldura discreta. */
+  .tela { margin: 32px 0 0; border: 1px solid var(--line2); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
+  .tela img { display: block; width: 100%; height: auto; }
+
   /* Texto à esquerda e sumário fixo à direita. No celular, o sumário some. */
   .caso { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 54px; align-items: start; }
   .sumario { position: sticky; top: 120px; padding-top: 56px; }
@@ -76,17 +88,19 @@ const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
   }
 
   /* O texto vem do MDX, fora deste componente: por isso o :global. */
-  .prosa { max-width: 64ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
+  .prosa { max-width: 68ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
   .prosa :global(h2) { padding-top: 56px; margin-bottom: 14px; color: var(--fg); }
   .prosa :global(strong) { color: var(--fg); font-weight: 500; }
   .prosa :global(a) { color: var(--acc); }
-  .prosa :global(p code) { font-size: .9em; }
+  .prosa :global(p code), .prosa :global(li code), .prosa :global(td code) { font-size: .88em; color: var(--fg); }
+  .prosa :global(ol), .prosa :global(ul) { padding-left: 22px; margin: 0 0 20px; }
+  .prosa :global(li) { margin-bottom: 10px; }
 
-  /* Tabela do "O que quebrou": sintoma × causa e correção. */
+  /* Tabelas do MDX: como funciona, integrações, o que quebrou, conceitos. */
   .prosa :global(table) { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 8px 0 22px; }
   .prosa :global(th), .prosa :global(td) { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
   .prosa :global(th) { font-family: var(--mono); font-size: 10px; color: var(--fg3); letter-spacing: .07em; font-weight: 400; }
-  .prosa :global(td:first-child) { width: 34%; }
+  .prosa :global(td:first-child) { width: 30%; }
   @media (max-width: 620px) {
     .prosa :global(thead) { display: none; }
     .prosa :global(tr) { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }

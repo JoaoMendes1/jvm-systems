@@ -102,9 +102,18 @@ const dominio = (url?: string) => (url ? new URL(url).host : '');
       <div class="grid">
         {cards.map((p) => (
           <article class="card">
-            <div class={`cap ${p.data.visual}`} aria-hidden="true"></div>
+            {/* Com capa, a captura de tela aparece como uma janela sobre o
+                gradiente. Sem capa, fica só o gradiente, que é decoração. */}
+            <div class:list={['cap', p.data.visual, { 'com-tela': p.data.capa }]} aria-hidden={p.data.capa ? undefined : 'true'}>
+              {p.data.capa && (
+                <img src={p.data.capa} alt={p.data.capaAlt} width="1200" height="800" loading="lazy" decoding="async" />
+              )}
+            </div>
             <div class="corpo">
-              <h3>{p.data.nome}</h3>
+              <div class="nome">
+                <h3>{p.data.nome}</h3>
+                {p.data.fase && <span class="fase">{p.data.fase}</span>}
+              </div>
               <p>{p.data.resumo}</p>
               <ul class="chips">
                 {p.data.stack.map((s, i) => <li class:list={['chip', { principal: i === 0 }]}>{s}</li>)}
@@ -217,7 +226,7 @@ const dominio = (url?: string) => (url ? new URL(url).host : '');
   .card:hover { border-color: var(--line2); box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
 
   /* Capa: gradiente escolhido pelo campo `visual`, com grade que se apaga. */
-  .cap { height: 142px; position: relative; border-bottom: 1px solid var(--line); }
+  .cap { height: 142px; position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
   .cap::before {
     content: "";
     position: absolute;
@@ -233,14 +242,34 @@ const dominio = (url?: string) => (url ? new URL(url).host : '');
   .cap.violeta { background: linear-gradient(135deg, #191627, #26213E 52%, #101017); }
   .cap.neutro { background: linear-gradient(135deg, #1B1B21, #27272F 52%, #0F0F13); }
 
+  /* Captura de tela como uma janela que sai de baixo do card. */
+  .cap.com-tela { height: 210px; }
+  .cap img {
+    position: absolute;
+    left: 7%;
+    top: 26px;
+    width: 86%;
+    height: calc(100% - 26px);
+    object-fit: cover;
+    object-position: top left;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-bottom: 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, .5);
+    transition: transform .4s cubic-bezier(.2, .7, .3, 1);
+  }
+
   .corpo { padding: 22px 24px 24px; }
   .corpo p { font-size: 14.5px; color: var(--fg2); margin: 10px 0 17px; line-height: 1.56; }
+  .nome { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .fase { font-family: var(--mono); font-size: 10.5px; padding: 3px 10px; border-radius: 999px; background: var(--acc-dim); color: var(--acc); white-space: nowrap; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .chip { font-family: var(--mono); font-size: 10.5px; padding: 4px 9px; border-radius: 7px; border: 1px solid var(--line2); color: var(--fg2); }
   .chip.principal { background: var(--acc-dim); border-color: transparent; color: var(--acc); }
   .more { display: inline-flex; gap: 8px; margin-top: 19px; font-size: 13.5px; font-weight: 500; color: var(--acc); text-decoration: none; }
   @media (prefers-reduced-motion: no-preference) {
     .card:hover { transform: translateY(-4px); }
+    .card:hover .cap img { transform: translateY(-6px); }
     .more span { transition: transform .25s; }
     .card:hover .more span { transform: translateX(5px); }
   }
