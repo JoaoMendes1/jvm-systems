@@ -6,23 +6,23 @@
 > a cada build. Este documento explica o schema e o porquê de cada regra. Se os dois divergirem,
 > o código vale e este documento é corrigido.
 >
-> **Por que isto é um contrato e não só um guia:** na Fase 4, um painel vai escrever estes
-> arquivos sozinho. Ele só pode gravar o que passa neste schema.
+> **Por que isto é um contrato e não só um guia:** se um painel de escrita existir um dia, ele só
+> poderá gravar o que passa neste schema.
 
 ---
 
 ## Tom e posicionamento
 
-> Vale para todo texto do site: home, sobre, estudos de caso e pílulas. Registrado em 24/09/2026,
-> depois que os textos do primeiro protótipo saíram exagerados.
+> Vale para todo texto do site: home, sobre, estudos de caso e pílulas. Registrado em 24/09/2026.
 
 ### Quem escreve, em fatos
 
-- Cinco anos em **suporte e gestão de acesso** (Active Directory, perfis, VPN, MFA).
-- Programa há anos, **mas sem constância**. Agora está se dedicando de verdade.
-- Procura vaga de **desenvolvedor júnior**.
-- Constrói **com ajuda de IA** e registra o porquê das decisões em cada repositório.
-- Mantém os próprios projetos no ar, numa VPS configurada por ele.
+- Desenvolvedor full-stack júnior.
+- Formado em Sistemas de Informação (UniNorte, 2017–2021).
+- Trabalha com gestão de acesso desde 2019 (Active Directory, perfis, VPN, MFA).
+- Mantém os próprios projetos no ar, numa VPS configurada por ele, e registra o porquê das
+  decisões em cada repositório.
+- Estuda IA aplicada (RAG, embeddings), implementando nos próprios projetos.
 
 O texto parte daqui. Não aumenta nada disso, e também não precisa diminuir.
 
@@ -32,24 +32,10 @@ O texto parte daqui. Não aumenta nada disso, e também não precisa diminuir.
   robusta".
 - **Nenhum número que não se possa conferir.** Se alguém perguntar "como você mediu isso?", a
   resposta tem que existir.
-- **O uso de IA é dito abertamente.** Esconder vira problema na primeira pergunta técnica de
-  detalhe; dizer, junto com "e sei explicar cada escolha", é uma posição forte.
 - **Frase simples.** Sem aforismo e sem frase de efeito. Se a frase soa bem mas não diz nada
   verificável, sai.
 - **Escrever como se fala numa entrevista.** Se você não diria aquilo em voz alta para quem está
   te avaliando, não escreva.
-
-### O que não repetir
-
-Trechos da v3 do protótipo, reescritos na v4:
-
-| Trecho | Problema |
-|---|---|
-| "5 anos operando sistemas críticos" | Foram 5 anos gerenciando **acesso** a sistemas críticos, não operando os sistemas |
-| "me ensinaram como sistemas quebram em produção" | Suporte mostra como o usuário sente a quebra, não por que ela acontece |
-| "antes de escrever software" | Inverte a história: a programação veio antes, só que sem constância |
-| "continuo de plantão depois que sobem" | "Plantão" sugere on-call de verdade |
-| "escrita e operada por mim, de ponta a ponta" | Verdade, mas omite a IA — e a pergunta vem |
 
 > **Pergunta obrigatória:** eu defenderia esta frase numa entrevista, com um exemplo concreto do
 > que fiz? Se não, ela sai ou fica mais simples.
@@ -146,7 +132,7 @@ O sumário lateral é gerado a partir dos títulos `##`. Não se escreve à mão
 
 ### Componentes disponíveis no MDX
 
-*Planejados para a Fase 2. O nome das props é definitivo; o visual está no `docs/DESIGN_TOKENS.md`.*
+*O nome das props é definitivo; o visual está no `docs/DESIGN_TOKENS.md`.*
 
 ~~~mdx
 <Decisao

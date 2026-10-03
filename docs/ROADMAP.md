@@ -8,17 +8,16 @@
 **Fases 1, 2 e 3** = MVP publicável: esqueleto no ar, páginas com conteúdo real e acabamento
 mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre um site já no ar.
 
-O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.** O painel de
-escrita não precisa — publicar por commit funciona.
+O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.**
 
 ## 📍 Status atual (03/10/2026)
 
-| Fase                        | Status                                                         |
-| --------------------------- | -------------------------------------------------------------- |
-| 1 · Fundação e deploy       | ✅ Concluída                                                    |
-| 2 · Páginas e conteúdo      | ✅ Concluída                                                    |
-| 3 · Acabamento e publicação | ✅ MVP no ar — pendente só a URL de privacidade no Google Cloud |
-| 4 · Painel de escrita       | 💭 Pós-MVP                                                      |
+| Fase | Status |
+|---|---|
+| 1 · Fundação e deploy | ✅ Concluída |
+| 2 · Páginas e conteúdo | ✅ Concluída |
+| 3 · Acabamento e publicação | ✅ Concluída — MVP entregue em 03/10/2026 |
+| 4 · Reposicionamento e estudos de caso | 🚧 Em andamento |
 
 ---
 
@@ -73,11 +72,10 @@ escrita não precisa — publicar por commit funciona.
 
 - [x] Metadados por página: `title`, `description`, URL canônica e imagem de Open Graph. (#10)
 - [x] `sitemap.xml` e `robots.txt`. (#10)
-- [x] Teste real no celular, no mesmo espírito da Fase 3 do AniDeck.
+- [x] Teste real no celular.
 - [x] **Revisão de conteúdo:**
-  - [x] primeira pílula: data e fatos alinhados ao comentário do `cmd/web/main.go` (o painel
-        mostrava o interruptor "ligado");
-  - [x] estudo de caso do AniDeck: tirado o "quase um minuto", que não tinha medição;
+  - [x] primeira pílula: data e fatos alinhados ao comentário do `cmd/web/main.go`;
+  - [x] estudo de caso do AniDeck: tirado o número que não tinha medição;
   - [x] política de privacidade: Grimoire coberto pela política do portfólio, com exclusão de
         dados pedida por e-mail;
   - [x] textos da home, do Sobre e da página de pílulas;
@@ -92,19 +90,22 @@ escrita não precisa — publicar por commit funciona.
 
 ---
 
-## ✍️ Fase 4: Painel de escrita — *pós-MVP*
+## 🧭 Fase 4: Reposicionamento e estudos de caso — *pós-MVP*
 
-> Protótipo na aba "Painel" do `prototipos/vitrine-v4.html`.
+> Iniciada em 03/10/2026. O site passa a abrir pelo que eu construo, e cada projeto mostra
+> como funciona por dentro. Também reúne o que estou estudando.
 
-O desenho já está decidido: **o painel escreve arquivo, não serve o site.** Ele grava o `.mdx`
-no repositório e o deploy normal faz o resto. Se o painel cair, o site continua no ar.
-
-O que falta decidir antes de virar issue:
-
-- [ ] Autenticação do painel — é o único ponto do projeto com login.
-- [ ] Como o painel grava no repositório: API do GitHub com token restrito a este repositório,
-      ou commit a partir da própria VPS.
-- [ ] Onde o painel roda e se ele é um projeto separado.
+- [x] **Textos novos** no hero, no Sobre e no contato, e a seção "Competências, com prova",
+      com cada item apontando para o projeto onde está implementado. (#11)
+- [ ] **Modelo de estudo de caso v2** no `docs/CONTEUDO.md`: problema, como funciona,
+      integrações externas, IA no projeto, decisões, código, o que quebrou, conceitos e em
+      andamento.
+- [ ] Estudo de caso do AniDeck no modelo v2.
+- [ ] Estudo de caso do Grimoire no modelo v2.
+- [ ] Pílulas tiradas das issues: filtro no campo errado da AniList, Gemini com busca e JSON,
+      RAG × SQL.
+- [ ] Certificados no Sobre, com link para a credencial.
+- [ ] Currículo e LinkedIn com os mesmos fatos e datas do site.
 
 ---
 
@@ -112,12 +113,14 @@ O que falta decidir antes de virar issue:
 
 > Nada aqui é compromisso de escopo.
 
+- [ ] **Painel de escrita.** Adiado em 03/10/2026. O desenho continua decidido: o painel
+      escreve arquivo, não serve o site. Antes de virar issue: autenticação, como grava no
+      repositório e onde roda.
 - [ ] **Quadro "rodando agora" com estado real.** Hoje é gerado no build a partir do
       `status` do arquivo. Uma versão viva exigiria checar os serviços, o que traz de volta um
       servidor. Só vale se houver pergunta real que a versão estática não responde.
 - [ ] **Redirecionar `www.joaomendes.dev.br`** para o domínio sem `www`. Exige registro DNS novo.
-- [ ] **Feed RSS das pílulas.** Barato no Astro; só vale se alguém for assin
-- [x] **Estudo de caso do Grimoire.**
+- [ ] **Feed RSS das pílulas.** Barato no Astro; só vale se alguém for assinar.
 - [ ] **Card do Lab de acessos**, quando o repositório existir.
 
 ### Avaliado e descartado (documentado pra não reabrir sem contexto)

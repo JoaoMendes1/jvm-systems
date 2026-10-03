@@ -1,75 +1,73 @@
 ---
-// Sobre: trajetória e ferramental. Afirmações confirmadas pelo autor em
-// 28/09/2026; mudar só com o fato na mão (docs/CONTEUDO.md, "Tom e posicionamento").
+// Sobre: história, experiência, formação e estudo. Datas e cargos iguais aos
+// do LinkedIn (conferido em 03/10/2026). Mudar só com o fato na mão.
 import Base from '../layouts/Base.astro';
 import Contato from '../components/Contato.astro';
 
-// Tabelas geradas destes dados, sem HTML repetido. Os períodos são texto
-// fixo, não datas do frontmatter: não passam pela armadilha do fuso.
-const TRAJETORIA = [
+const EXPERIENCIA = [
   {
     periodo: 'dez 2025 — hoje',
-    cargo: 'Analista de suporte',
+    cargo: 'Analista de suporte júnior',
     empresa: 'BRD Soluções (cliente Detran SC)',
-    descricao: 'Gestão de acesso em sistemas estaduais: análise e concessão de permissão, desbloqueio e segurança de perfil.',
+    descricao: 'Gestão de acesso em sistemas estaduais (DetranNet, Portal ECV e SGPe): análise e concessão de permissões, desbloqueios e redefinição de senhas.',
   },
   {
-    periodo: 'jul 2023 — nov 2025',
-    cargo: 'Técnico de suporte',
+    periodo: 'jun 2023 — nov 2025',
+    cargo: 'Analista de suporte de TI I',
     empresa: 'Stefanini (cliente Oncoclínicas)',
-    descricao: 'N1 e N2 em sistemas e acesso, perfil no ERP e AD, rede corporativa, VPN e MFA, sob SLA.',
+    descricao: 'Suporte N1 e N2 a sistemas e acessos: Office 365, ERP Fluig, Active Directory, MFA e VPN, sob SLA.',
   },
   {
-    periodo: 'out 2019 — jul 2021',
+    periodo: 'set 2019 — jul 2021',
     cargo: 'Estagiário de TI',
     empresa: 'Polícia Federal',
-    descricao: 'Active Directory e File Server com autonomia de permissão, VPN e controle de acesso físico.',
+    descricao: 'Active Directory, GPOs e File Server, com autonomia para gerenciar permissões; VPN e controle de acesso físico.',
   },
 ];
 
-const FERRAMENTAL = [
-  { area: 'nos projetos', itens: 'Go · chi · TypeScript · React · JavaScript · PostgreSQL (Supabase)' },
-  { area: 'infraestrutura', itens: 'Linux · Docker · Caddy · GitHub Actions · VPS' },
-  { area: 'estudando', itens: 'Node · MySQL' },
+const FORMACAO = [
+  { periodo: '2017 — 2021', titulo: 'Bacharel em Sistemas de Informação', onde: 'UniNorte (Centro Universitário do Norte)' },
+];
+
+const ESTUDANDO = [
+  { titulo: 'Formação Full-Stack', onde: 'Rocketseat', detalhe: 'JavaScript, TypeScript, Node.js e React' },
+  { titulo: 'Formação Go', onde: 'Rocketseat', detalhe: 'aprofundando o que já uso nos projetos' },
+  { titulo: 'IA aplicada', onde: 'nos meus projetos', detalhe: 'RAG e embeddings, começando pelo AniDeck' },
 ];
 ---
 <Base
   title="Sobre — João Victor Mendes"
-  description="Cinco anos em suporte e gestão de acesso, e como eu construo e mantenho meus projetos."
+  description="Quem eu sou, de onde vim e o que estou construindo e estudando."
 >
   <p class="eyebrow">quem escreve isso</p>
   <h1 class="titulo">João Victor<br /><span class="ital grad">Mendes</span></h1>
-  <p class="lede abertura">
-    Bacharel em Sistemas de Informação, com cinco anos de experiência em suporte e gestão de
-    acesso. Programo há bastante tempo, mas sem constância; agora estou me dedicando de verdade, e
-    este site reúne o que construí nessa fase.
-  </p>
+  <div class="prosa abertura">
+    <p>
+      Me formei em Sistemas de Informação no Acre, em 2021, e desde a faculdade quis trabalhar com
+      desenvolvimento. Vim sozinho para Santa Catarina atrás dessa oportunidade, sem conhecer ninguém
+      e sem emprego. Aceitei a primeira vaga que apareceu, no suporte, e foi com ela que me firmei na
+      cidade.
+    </p>
+    <p>
+      Hoje sou analista de gestão de acesso, mas o meu objetivo nunca mudou: desenvolvimento. Como as
+      empresas pedem experiência comprovada, construo projetos reais e coloco no ar. É o que este site
+      reúne.
+    </p>
+  </div>
 
   <section class="bloco">
-    <h2>O que o suporte me ensinou</h2>
+    <h2>Do suporte para o código</h2>
     <p class="prosa">
-      Gestão de acesso é, no fundo, autorização: quem pode fazer o quê, e em que condição. Quando
-      precisei proteger os dados de cada usuário no AniDeck com RLS no Postgres, a ideia já era
-      conhecida — o que mudou foi a sintaxe. O suporte também me ensinou a desconfiar do problema
-      que ninguém vê. Por isso, nos meus projetos, <strong>o serviço se recusa a iniciar se falta
-      alguma configuração</strong>, em vez de subir pela metade.
+      No trabalho, cuido de gestão de acesso: quem pode fazer o quê, em qual sistema. Nos meus
+      projetos é o mesmo problema, resolvido com JWT e com regras de acesso no próprio banco.
     </p>
   </section>
 
   <section class="bloco">
-    <h2>Como eu trabalho</h2>
-    <p class="prosa">
-      Construo com ajuda de IA, e digo isso abertamente. Antes de aceitar uma sugestão, peço o
-      porquê, e registro as decisões importantes no próprio repositório, junto com a alternativa
-      que descartei. O objetivo é conseguir explicar cada escolha que está no código.
-    </p>
-  </section>
-
-  <section class="bloco">
-    <h2>Trajetória</h2>
+    <h2>Experiência</h2>
     <table class="tabela">
       <tbody>
-        {TRAJETORIA.map((t) => (
+        {EXPERIENCIA.map((t) => (
           <tr>
             <th scope="row">{t.periodo}</th>
             <td><b>{t.cargo}</b> · {t.empresa}<br />{t.descricao}</td>
@@ -80,13 +78,27 @@ const FERRAMENTAL = [
   </section>
 
   <section class="bloco">
-    <h2>Ferramental</h2>
+    <h2>Formação</h2>
     <table class="tabela">
       <tbody>
-        {FERRAMENTAL.map((f) => (
+        {FORMACAO.map((f) => (
           <tr>
-            <th scope="row">{f.area}</th>
-            <td>{f.itens}</td>
+            <th scope="row">{f.periodo}</th>
+            <td><b>{f.titulo}</b> · {f.onde}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bloco">
+    <h2>Estudando agora</h2>
+    <table class="tabela">
+      <tbody>
+        {ESTUDANDO.map((e) => (
+          <tr>
+            <th scope="row">{e.onde}</th>
+            <td><b>{e.titulo}</b> · {e.detalhe}</td>
           </tr>
         ))}
       </tbody>
@@ -98,18 +110,18 @@ const FERRAMENTAL = [
 
 <style>
   .titulo { font-size: clamp(36px, 6.4vw, 58px); }
-  .abertura { margin-top: 22px; }
-  .bloco { padding-top: 60px; }
+  .abertura { margin-top: 26px; }
+  .bloco { padding-top: 56px; }
   .prosa { max-width: 64ch; color: var(--fg2); font-size: 16.5px; line-height: 1.75; }
-  .prosa strong { color: var(--fg); font-weight: 500; }
+  .prosa p { margin: 0 0 16px; }
 
   .tabela { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-top: 12px; }
   .tabela th, .tabela td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
   .tabela th { width: 26%; font-family: var(--mono); font-size: 10.5px; color: var(--fg3); letter-spacing: .07em; font-weight: 400; }
-  .tabela td { color: var(--fg2); }
+  .tabela td { color: var(--fg2); line-height: 1.6; }
   .tabela b { color: var(--fg); font-weight: 500; }
 
-  /* No celular, período em cima e descrição embaixo, em vez de duas colunas apertadas. */
+  /* No celular, rótulo em cima e texto embaixo, em vez de duas colunas apertadas. */
   @media (max-width: 620px) {
     .tabela tr { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
     .tabela th, .tabela td { display: block; width: auto; padding: 0; border: 0; }
