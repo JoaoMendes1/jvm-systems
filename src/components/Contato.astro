@@ -5,6 +5,12 @@
 const EMAIL = 'joaodev21@gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/jo%C3%A3o-victor-mendes-41521b1b9/';
 const GITHUB = 'https://github.com/JoaoMendes1';
+
+// WhatsApp no formato internacional, só dígitos: 55 (Brasil) + 68 (DDD) + número.
+// O wa.me é o link oficial: abre o app no celular e o WhatsApp Web no computador.
+const WHATSAPP = 'v';
+const MENSAGEM = 'Olá, João! Vi seu portfólio e queria conversar.';
+const LINK_WHATSAPP = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MENSAGEM)}`;
 ---
 <section class="cta" id="contato">
   <h2>Vamos conversar?</h2>
@@ -12,7 +18,8 @@ const GITHUB = 'https://github.com/JoaoMendes1';
     Aberto a vaga de desenvolvedor júnior: presencial ou híbrido na Grande Florianópolis, ou remoto.
   </p>
   <div class="actions">
-    <a class="btn p" href={`mailto:${EMAIL}`}>Mandar e-mail</a>
+    <a class="btn p" href={LINK_WHATSAPP} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    <a class="btn s" href={`mailto:${EMAIL}`}>E-mail</a>
     <!-- Abrem em nova guia para o visitante não sair do portfólio.
          noopener impede a página aberta de controlar esta guia. -->
     <a class="btn s" href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
