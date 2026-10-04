@@ -14,3 +14,22 @@ A flag morava numa variável de pacote. No free tier, o container hiberna sem tr
 <Callout>**A lição geral:** estado que precisa sobreviver a um restart não pode morar só no processo. E "restart" não é só deploy — é hibernação, OOM kill, migração de host. Todos acontecem sem você olhando.</Callout>
 
 A correção foi gravar a flag numa tabela de configuração e relê-la no boot. A memória continua sendo a fonte de leitura, porque precisa ser instantânea; o banco virou a fonte de verdade na inicialização.
+
+---
+titulo: Erro de serviço externo não é 500
+resumo: Quando a API da AniList caiu, o AniDeck respondia 500 numa tela, 502 em outra e 503 numa terceira. O 500 apontava para o lugar errado.
+data: 2026-10-04
+tags: [go]
+projeto: anideck
+rascunho: false
+---
+
+Em agosto, a API da AniList ficou fora do ar e o AniDeck caiu junto: ranking, busca, deck e detalhes. Um `curl` direto na API, sem passar pelo meu backend, mostrou a causa: ela respondia 403 para todo mundo.
+
+O problema que ficou visível depois foi outro. A mesma falha aparecia com três códigos diferentes: 503 no ranking, 500 nos detalhes e 502 no agente de sugestões do painel.
+
+**O código de status é a primeira pista de quem errou.** `500` diz "o meu servidor quebrou". `503` diz "um serviço do qual eu dependo está indisponível". Respondendo 500, o próprio app apontava a investigação para o meu código, quando a causa era de fora.
+
+<Callout>**A lição geral:** falha de serviço externo vira `503`, com o motivo no corpo da resposta. Assim, o log e a tela já dizem de quem é o problema antes de qualquer investigação.</Callout>
+
+Padronizei os handlers: toda falha da AniList passou a responder 503, com uma mensagem dizendo que a fonte externa está indisponível. A regra também foi escrita no Grimoire, que depende do Google do mesmo jeito.
