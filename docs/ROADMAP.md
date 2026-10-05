@@ -103,10 +103,12 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
 - [x] Estudo de caso do AniDeck no modelo v2. (#12)
 - [x] Ícone da aba, captura de tela nos cards e estágio de cada projeto (`fase`). (#12)
 - [x] Estudo de caso do Grimoire no modelo v2.
-- [ ] Pílulas tiradas das issues: filtro no campo errado da AniList, Gemini com busca e JSON,
-      RAG × SQL.
-- [ ] Certificados no Sobre, com link para a credencial.
-- [ ] Currículo e LinkedIn com os mesmos fatos e datas do site.
+- [x] Pílulas: IF NOT EXISTS, Docker e UFW, erro 503, RAG × SQL, filtro no campo errado da
+      AniList e Gemini com busca e JSON. Tag nova `ia`.
+- [x] Pílulas ligadas aos projetos: nome do projeto no cartão, filtro por projeto combinado
+      com o de tema, e seção "Pílulas deste projeto" no estudo de caso.
+- [x] Certificados no Sobre, com link para a credencial.
+- [x] Currículo e LinkedIn com os mesmos fatos e datas do site.
 
 ---
 

@@ -188,7 +188,7 @@ rascunho: false
 | `resumo` | sim | até 180 caracteres |
 | `data` | sim | `AAAA-MM-DD` |
 | `tags` | sim | ao menos uma, do vocabulário abaixo |
-| `projeto` | não | precisa existir em `src/content/projetos/` — o build recusa slug inexistente |
+| `projeto` | não | precisa existir em `src/content/projetos/` — o build recusa slug inexistente. Liga a pílula ao filtro por projeto e à seção "Pílulas deste projeto" do estudo de caso |
 | `atualizado` | não | `AAAA-MM-DD`, posterior a `data` |
 | `rascunho` | não | padrão `false` |
 

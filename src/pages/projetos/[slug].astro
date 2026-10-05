@@ -7,7 +7,8 @@ import Base from '../../layouts/Base.astro';
 import Decisao from '../../components/Decisao.astro';
 import Terminal from '../../components/Terminal.astro';
 import Callout from '../../components/Callout.astro';
-import { temEstudoDeCaso } from '../../lib/conteudo';
+import { temEstudoDeCaso, pilulaPublicada } from '../../lib/conteudo';
+import { formatarData, dataISO } from '../../lib/datas';
 
 export const getStaticPaths = (async () => {
   const projetos = (await getCollection('projetos')).filter(temEstudoDeCaso);
@@ -28,6 +29,12 @@ const semProtocolo = (u?: string) => (u ? u.replace(/^https:\/\//, '') : '');
 
 // Rótulo do topo: onde o projeto está ("no ar") e, se houver, em que estágio.
 const estado = [status === 'no-ar' ? 'no ar' : 'em construção', fase].filter(Boolean).join(' · ');
+
+// Pílulas que apontam para este projeto no campo `projeto`, da mais recente
+// para a mais antiga. Sem nenhuma, a seção não aparece.
+const pilulas = (await getCollection('pilulas'))
+  .filter((p) => pilulaPublicada(p) && p.data.projeto?.id === projeto.id)
+  .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
 ---
 <Base title={`${nome} — estudo de caso`} description={resumo} type="article">
   <a class="voltar" href="/#projetos">← vitrine</a>
@@ -59,6 +66,24 @@ const estado = [status === 'no-ar' ? 'no ar' : 'em construção', fase].filter(B
       </nav>
     )}
   </div>
+
+  {pilulas.length > 0 && (
+    <section class="pilulas" aria-labelledby="pilulas-titulo">
+      <h2 id="pilulas-titulo">Pílulas deste projeto</h2>
+      <p class="pilulas-sub">O que eu aprendi resolvendo problemas neste projeto.</p>
+      <ul>
+        {pilulas.map((p) => (
+          <li>
+            <a href={`/pilulas/${p.id}`}>
+              <b>{p.data.titulo}</b>
+              <span>{p.data.resumo}</span>
+              <time datetime={dataISO(p.data.data)}>{formatarData(p.data.data)}</time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -107,4 +132,14 @@ const estado = [status === 'no-ar' ? 'no ar' : 'em construção', fase].filter(B
     .prosa :global(td) { display: block; width: auto !important; padding: 0; border: 0; }
     .prosa :global(td + td) { margin-top: 6px; }
   }
+
+  /* Pílulas ligadas a este projeto, no fim do estudo de caso. */
+  .pilulas { margin-top: 72px; border-top: 1px solid var(--line); padding-top: 48px; max-width: 68ch; }
+  .pilulas-sub { margin-top: 10px; font-size: 14px; color: var(--fg3); }
+  .pilulas ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+  .pilulas a { display: grid; gap: 6px; text-decoration: none; color: inherit; border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 18px 20px; transition: border-color .22s, background .22s; }
+  .pilulas a:hover { border-color: var(--line2); background: var(--card2); }
+  .pilulas b { font-size: 15.5px; font-weight: 600; color: var(--fg); letter-spacing: -.01em; }
+  .pilulas span { font-size: 14px; color: var(--fg2); line-height: 1.55; }
+  .pilulas time { font-family: var(--mono); font-size: 10.5px; color: var(--fg3); }
 </style>

@@ -1,0 +1,18 @@
+---
+titulo: O Gemini não pesquisa na web e responde em JSON na mesma chamada
+resumo: Para trazer títulos de episódio com fonte, eu precisava das duas coisas juntas. A API recusou com erro 400, e o desenho virou duas chamadas.
+data: 2026-10-05
+tags: [ia, go]
+projeto: anideck
+rascunho: false
+---
+
+Estou construindo no AniDeck uma busca de títulos de episódio em português, datas e onde assistir. A AniList não tem título em português, então a IA precisa pesquisar na web, e o resultado precisa voltar estruturado, para o backend gravar campo por campo.
+
+Na API do Gemini, isso são dois recursos: a ferramenta de busca do Google (`google_search`), para pesquisar, e `ResponseMIMEType: application/json`, para a resposta vir em JSON. Com os dois ligados na mesma chamada, a API responde `400 INVALID_ARGUMENT`: a combinação não é aceita.
+
+A saída óbvia seria pedir o JSON pelo próprio texto do prompt ("responda só em JSON"). Nos modelos flash que eu uso, isso se mostrou instável.
+
+<Callout>**A lição geral:** quando uma API não deixa combinar dois recursos, separar em duas etapas costuma ser mais confiável do que forçar um deles pelo prompt. Cada chamada faz uma coisa só, e dá para testar cada uma separadamente.</Callout>
+
+O desenho ficou com duas chamadas por anime: a primeira pesquisa, com a busca ligada, e devolve texto com as fontes; a segunda não pesquisa nada e só converte esse texto para JSON. Custa uma chamada a mais. **Ainda está em andamento**, e esses campos nunca são gravados direto: passam por revisão humana antes.

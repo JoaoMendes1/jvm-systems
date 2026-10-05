@@ -1,0 +1,25 @@
+---
+titulo: Filtrar no campo errado devolve vazio, não erro
+resumo: Mandei "Adventure" no filtro de tags da AniList, e a API respondeu 200 com a lista vazia. Parecia catálogo esgotado; era o campo errado.
+data: 2026-10-05
+tags: [go]
+projeto: anideck
+rascunho: false
+---
+
+O Olheiro é um agente do painel do AniDeck que procura na AniList animes para eu curar, a partir de uma lista de rótulos com peso. Depois de cadastrar um rótulo novo, o scan rodou e trouxe candidatos dos outros rótulos, mas nenhum do novo.
+
+Parecia que o catálogo daquele rótulo tinha acabado. Não tinha. A AniList separa **gêneros** de **tags** em dois filtros diferentes, `genre_in` e `tag_in`, e "Adventure" é gênero. Eu estava mandando no filtro de tags.
+
+**A API não avisa:** responde `200` com `media: []`. Para quem lê o log, "não achou nada" e "perguntou errado" são a mesma resposta.
+
+<Callout>**A lição geral:** quando uma API responde sucesso com lista vazia, desconfie da pergunta antes de desconfiar dos dados. Vazio é uma resposta válida, e por isso esconde erro de uso.</Callout>
+
+A correção foi parar de adivinhar. A própria AniList publica as duas listas, `GenreCollection` e `MediaTagCollection`. Antes de filtrar, o backend confere em qual delas o termo está e manda pelo campo certo. O mesmo cruzamento passou a montar o seletor de rótulos do painel, então a tela só oferece o que funciona.
+
+A conferência rápida, direto na API:
+
+```bash
+curl -s https://graphql.anilist.co -H "Content-Type: application/json" \
+  -d '{"query":"{ Page(perPage:3){ media(type:ANIME, tag_in:[\"Adventure\"]){ idMal } } }"}'
+```
