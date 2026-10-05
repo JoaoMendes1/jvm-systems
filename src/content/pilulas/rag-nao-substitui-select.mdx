@@ -1,0 +1,21 @@
+---
+titulo: RAG não serve para pergunta que cabe num SELECT
+resumo: Planejando IA no AniDeck, entendi o que são embedding e RAG, e por que contar animes do deck continua sendo trabalho do SQL.
+data: 2026-10-05
+tags: [ia, banco]
+projeto: anideck
+rascunho: false
+---
+
+Quando comecei a planejar IA aplicada no AniDeck, uma das ideias foi usar RAG para responder perguntas sobre o deck de cada usuário, como "quantos animes de isekai eu tenho".
+
+Antes de decidir, fui entender o que cada peça faz:
+
+- **Embedding** é transformar um texto numa lista de números que representa o significado dele. Textos com sentido parecido viram números próximos, mesmo usando palavras diferentes.
+- **RAG** (geração aumentada por recuperação) é buscar os trechos mais parecidos com a pergunta e entregar esses trechos ao modelo de IA antes de ele responder. Assim, a resposta se apoia no meu conteúdo, e não só no que o modelo já sabe.
+
+Com isso, a ideia caiu. "Quantos isekai eu tenho" tem uma resposta exata, e ela já está no banco: é um `SELECT` com `COUNT`. Passar isso por uma busca por similaridade deixaria a resposta mais lenta, mais cara e **menos exata**, porque similaridade aproxima, não conta.
+
+<Callout>**A lição geral:** RAG serve para o que o SQL não faz: buscar por significado em texto livre. Dado estruturado, com resposta exata, continua sendo consulta.</Callout>
+
+No AniDeck, o plano ficou com dois usos que cabem de verdade: buscar animes pelo sentido das sinopses ("parecidos com este") e buscar trechos na documentação do próprio projeto. O `pgvector`, extensão do PostgreSQL que guarda os embeddings, está disponível no plano gratuito do Supabase, sem banco novo. **Ainda é planejamento: nada disso está implementado.**
