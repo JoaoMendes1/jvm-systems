@@ -5,7 +5,7 @@ import { z } from 'astro/zod';
 
 // Lista fechada: tag digitada errado quebra o build em vez de criar uma
 // categoria nova com uma pílula só. Tag nova muda o contrato e pede issue.
-const TAGS = ['infra', 'go', 'banco', 'deploy', 'frontend', 'seguranca'] as const;
+const TAGS = ['infra', 'go', 'banco', 'deploy', 'frontend', 'seguranca', 'ia'] as const;
 
 // Só https, para o site nunca apontar para um endereço sem certificado.
 const https = z.url({ protocol: /^https$/ });

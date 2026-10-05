@@ -1,0 +1,18 @@
+---
+titulo: CREATE TABLE IF NOT EXISTS cria, mas nunca altera
+resumo: O Go declarava a coluna como TEXT, o banco tinha uuid, e o boot dizia que estava tudo certo. Por semanas, nada avisou.
+data: 2026-10-04
+tags: [banco]
+projeto: grimoire
+rascunho: false
+---
+
+No Grimoire, as tabelas eram criadas pelo próprio servidor a cada boot, com `CREATE TABLE IF NOT EXISTS`. Parecia prático: banco vazio ganhava as tabelas sozinho, e banco pronto seguia em frente.
+
+Quando retomei o projeto e comparei o código com o banco, achei uma divergência. O Go declarava `user_id TEXT`, mas no Supabase a coluna de `vocabularies` já era `uuid`, alterada à mão em algum momento. Mesmo assim, o boot anunciava "schema verificado com sucesso".
+
+O motivo está no próprio comando. **`IF NOT EXISTS` só confere se a tabela existe. Se existir, ele não compara nada e não altera nada.** Qualquer mudança de coluna escrita no código depois da primeira execução é ignorada em silêncio.
+
+<Callout>**A lição geral:** um comando que "garante" o schema só garante que a tabela existe, não que ela está do jeito que o código espera. Mudança de coluna é `ALTER TABLE`, num arquivo próprio.</Callout>
+
+A correção foi tirar o DDL do Go. O schema passou a viver em arquivos numerados na pasta `sql/`, aplicados à mão e nunca editados depois de aplicados. O servidor agora só confere se as tabelas existem e se recusa a subir se faltar alguma.

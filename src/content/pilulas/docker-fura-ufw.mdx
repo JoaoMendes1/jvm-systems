@@ -1,0 +1,21 @@
+---
+titulo: O Docker passa por cima do firewall
+resumo: O UFW dizia que só três portas estavam abertas, mas a porta de um container respondia de fora. Só descobri testando de fora da máquina.
+data: 2026-10-04
+tags: [infra, seguranca]
+rascunho: false
+---
+
+Na migração para a VPS, configurei o UFW para deixar abertas só as portas 22, 80 e 443, e o `ufw status` confirmava. Mesmo assim, quando testei de fora da máquina, a porta 8080 de um container respondia.
+
+O container tinha sido publicado com `ports`, o `-p` do Docker. **Para isso funcionar, o próprio Docker escreve regras no `iptables`, e o tráfego para o container passa por elas, não pelas regras de entrada que o UFW controla.** O firewall não estava errado: ele simplesmente não era consultado para aquele tráfego.
+
+<Callout>**A lição geral:** ler a configuração do firewall não prova que uma porta está fechada. A prova é tentar acessar de fora.</Callout>
+
+A correção foi trocar `ports` por `expose` em todos os containers de aplicação. Com `expose`, a porta só é alcançável pela rede interna do Docker. Quem fala com a internet é o Caddy, nas portas 80 e 443.
+
+A conferência, rodada de outra máquina, tem que falhar:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" http://IP_DA_VPS:8080
+```

@@ -194,7 +194,7 @@ rascunho: false
 
 ### Vocabulário de tags
 
-`infra` · `go` · `banco` · `deploy` · `frontend` · `seguranca`
+`infra` · `go` · `banco` · `deploy` · `frontend` · `seguranca` · `ia`
 
 - **É uma lista fechada, definida no schema.** Tag digitada errado quebra o build em vez de criar
   uma categoria nova com uma pílula só.
