@@ -1,0 +1,93 @@
+---
+nome: JVM Console
+resumo: "Meu painel de controle pessoal, para anotar o que estudo e publicar as pílulas deste site. Em planejamento: existem o protótipo navegável e a documentação, ainda não o código."
+status: em-construcao
+repo: https://github.com/JoaoMendes1/jvm-console
+stack: [Node.js, Fastify, TypeScript, PostgreSQL, React]
+papel: projeto pessoal
+visual: violeta
+ordem: 3
+fase: planejamento, ainda sem código
+capa: /projetos/jvm-console.webp
+capaAlt: Protótipo do JVM Console mostrando o editor de nota, com a barra de formatação e o texto em Markdown à esquerda e a prévia à direita.
+---
+
+## O problema e o objetivo
+
+Hoje, para publicar uma pílula aqui, eu escrevo um arquivo `.mdx` à mão no repositório do site. As anotações de estudo ficam espalhadas, e o que vira pílula depende de eu lembrar de passar a limpo.
+
+O JVM Console junta as duas coisas: é o caderno onde eu anoto o que estudo, e o lugar de onde publico no site o que vale mostrar, com um botão. Em fases seguintes, ele também deve reunir as visitas dos meus sites e o estado de cada projeto.
+
+**Está em planejamento.** O que existe hoje é o protótipo navegável e a documentação no repositório: decisões, arquitetura e roadmap. O código ainda não começou.
+
+<Callout>**Para ver como ele vai ser:** abra o [protótipo navegável](/prototipos/jvm-console/), com dados fictícios. Entre como dono ou como convidado, abra uma nota e teste a barra de formatação e o botão Organizar.</Callout>
+
+## Como vai funcionar
+
+| Peça | O que é |
+|---|---|
+| **Navegador** | React com Vite. A prévia do Markdown é desenhada no navegador e limpa com DOMPurify. |
+| **Servidor** | Node.js com Fastify e TypeScript. O mesmo servidor entrega a tela e a API, no mesmo endereço. |
+| **Login** | Google, só para a minha conta. Quem visita entra como convidado, num espaço próprio. |
+| **Banco** | PostgreSQL em container na VPS, acessado com SQL escrito à mão, com busca em português e sem diferenciar acento. |
+| **IA** | Gemini, só no servidor, para corrigir o português e sugerir estrutura. |
+| **Infra** | A mesma VPS dos outros projetos, com Docker e Caddy. |
+
+O caminho de uma pílula, do caderno até este site:
+
+1. Escrevo a nota em Markdown e marco como pílula.
+2. Clico em publicar. O Console marca a nota e pede ao GitHub um novo build deste site.
+3. No build, o site busca as pílulas publicadas numa rota da API do Console, protegida por token.
+4. O corpo entra como Markdown comum, nunca como MDX, e passa pela mesma lista fechada de HTML que o Console usa.
+5. Em cerca de 2 minutos, a pílula está no ar. Remover faz o mesmo caminho.
+
+## IA no projeto
+
+Tudo planejado, nada no ar:
+
+- **Corrigir português**, mantendo as minhas palavras: pontuação, acentos e concordância.
+- **Melhorar estrutura**: sugere seções, destaques e avisos.
+- **Nenhuma das duas altera a nota sozinha.** A sugestão aparece numa tela de antes e depois, e cada mudança pode ser recusada.
+- **Organizar**, sem IA: títulos, listas e espaços, sem mudar nenhuma palavra.
+- Mais adiante, **busca semântica com pgvector**, para achar nota parecida mesmo sem a mesma palavra.
+
+## Decisões e o que elas custam
+
+<Decisao
+  titulo="A pílula chega ao site no build, não a cada visita"
+  contexto="O site é estático, e quero continuar assim. Mas as pílulas passam a nascer no Console, que tem banco e servidor."
+  escolhi="O build do site busca as pílulas publicadas numa rota da API do Console. Publicar ou remover dispara um build novo."
+  descartei="Buscar as pílulas a cada visita, o que tornaria cada página dependente do Console estar no ar. E gravar arquivo no repositório do site, o que daria ao Console permissão de escrita nele."
+  custo="A mudança aparece em cerca de 2 minutos, e o build do site passa a depender do Console responder."
+/>
+
+<Decisao
+  titulo="Destaque e cor no texto por uma lista fechada de HTML"
+  contexto="Markdown não tem cor, e eu quero destacar trechos na leitura. Aceitar HTML livre abriria espaço para script malicioso, e o modo convidado deixa qualquer pessoa escrever."
+  escolhi="Só duas tags passam, mark e span, e só com as classes da paleta. O resto vira texto. A mesma lista vale no Console e neste site."
+  descartei="Deixar sem cor, e escrever o filtro de HTML eu mesmo, com expressão regular."
+  custo="Duas configurações de filtro para manter iguais, uma em cada projeto."
+/>
+
+<Decisao
+  titulo="Convidado com espaço próprio e demonstração da IA"
+  contexto="Quero que quem visita, um recrutador por exemplo, possa usar o Console de verdade. Mas a cota da IA é pequena e é a mesma que eu uso para estudar."
+  escolhi="Cada convidado ganha um espaço só seu, com notas de exemplo, apagado em 24 horas. A IA, para ele, é uma demonstração com respostas geradas antes."
+  descartei="Uma conta de demonstração compartilhada, em que um visitante veria o que outro escreveu. E um limite de usos por convidado, que zera a cada visita nova."
+  custo="Uma rotina de limpeza no servidor, e a demonstração só funciona nas notas de exemplo."
+/>
+
+<Decisao
+  titulo="SQL escrito à mão, sem ORM"
+  contexto="O schema dos meus projetos fica em arquivos SQL numerados, aplicados à mão. As partes difíceis deste projeto, como a busca em português e o isolamento por usuário, são SQL."
+  escolhi="A biblioteca pg, com cada consulta escrita por mim e os valores sempre passados como parâmetro."
+  descartei="Um ORM, que gera as próprias migrações e criaria uma segunda fonte de verdade para o schema."
+  custo="Os tipos das linhas são escritos à mão, e nenhuma consulta pode colar valor dentro do texto do SQL."
+/>
+
+## O que ainda não existe
+
+O primeiro corte, o MVP, é entrar com Google, escrever e buscar notas e publicar pílula neste site. Nada disso está construído. A ordem completa está no roadmap do repositório.
+
+- [Roadmap](https://github.com/JoaoMendes1/jvm-console/blob/main/docs/ROADMAP.md): as fases e o que entra em cada uma.
+- [Decisões](https://github.com/JoaoMendes1/jvm-console/blob/main/docs/DECISIONS.md): o porquê de cada escolha, com o custo aceito.

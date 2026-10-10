@@ -10,7 +10,7 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.**
 
-## 📍 Status atual (03/10/2026)
+## 📍 Status atual (10/10/2026)
 
 | Fase | Status |
 |---|---|
@@ -18,6 +18,7 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
 | 2 · Páginas e conteúdo | ✅ Concluída |
 | 3 · Acabamento e publicação | ✅ Concluída — MVP entregue em 03/10/2026 |
 | 4 · Reposicionamento e estudos de caso | 🚧 Em andamento |
+| 5 · Pílulas vindas do JVM Console | 🕐 Planejada |
 
 ---
 
@@ -107,8 +108,32 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
       AniList e Gemini com busca e JSON. Tag nova `ia`.
 - [x] Pílulas ligadas aos projetos: nome do projeto no cartão, filtro por projeto combinado
       com o de tema, e seção "Pílulas deste projeto" no estudo de caso.
+- [x] Estudo de caso do JVM Console, em planejamento, com o protótipo navegável em
+      `/prototipos/jvm-console/`.
 - [x] Certificados no Sobre, com link para a credencial.
 - [x] Currículo e LinkedIn com os mesmos fatos e datas do site.
+
+---
+
+## 🔗 Fase 5: Pílulas vindas do JVM Console — *planejada*
+
+> Registrada em 10/10/2026. O "painel de escrita" que estava no backlog virou projeto
+> próprio, o [JVM Console](https://github.com/JoaoMendes1/jvm-console). As pílulas deixam de
+> ser arquivos escritos à mão e passam a vir dele, no build. **Depende do MVP do Console.**
+> O contrato está no `docs/API.md` daquele repositório; a decisão, no `docs/DECISIONS.md`.
+
+- [ ] **Loader de conteúdo** que busca as pílulas publicadas na API do Console durante o
+      build, com o token num secret do repositório. Se a API não responder, o build falha.
+- [ ] **Corpo como Markdown comum, nunca como MDX**, sanitizado com rehype-sanitize pela
+      lista fechada do contrato.
+- [ ] **Schema das pílulas:** tags livres, no formato `^[a-z0-9-]+$`, no lugar da lista
+      fechada `TAGS`. Muda o contrato do `CONTEUDO.md`: pede issue.
+- [ ] **Caixas de aviso:** converter o formato do GitHub (`> [!TIP]`) para o aviso do site.
+      Onde converter ainda está em aberto no Console.
+- [ ] **Rebuild disparado pelo Console** ao publicar ou remover uma pílula.
+- [ ] **Troca sem buraco:** as pílulas atuais são recriadas no Console com o mesmo
+      endereço e a mesma data, e os `.mdx` saem no mesmo deploy em que o loader entra.
+- [ ] **`docs/CONTEUDO.md`** atualizado para o fluxo novo.
 
 ---
 
@@ -116,9 +141,8 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
 
 > Nada aqui é compromisso de escopo.
 
-- [ ] **Painel de escrita.** Adiado em 03/10/2026. O desenho continua decidido: o painel
-      escreve arquivo, não serve o site. Antes de virar issue: autenticação, como grava no
-      repositório e onde roda.
+- [ ] **Visitas pelo JVM Console** (Fase 3 dele): contagem sem cookie e sem guardar IP.
+      Quando entrar, muda a decisão "Sem analytics" e a página `/privacidade` no mesmo dia.
 - [ ] **Quadro "rodando agora" com estado real.** Hoje é gerado no build a partir do
       `status` do arquivo. Uma versão viva exigiria checar os serviços, o que traz de volta um
       servidor. Só vale se houver pergunta real que a versão estática não responde.
