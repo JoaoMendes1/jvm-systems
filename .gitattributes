@@ -1,0 +1,7 @@
+# Arquivos de texto sempre com LF, em qualquer sistema.
+# Sem isso, o Git do Windows troca para CRLF, e Dockerfile ou Caddyfile com CRLF quebra no container Linux.
+* text=auto eol=lf
+
+# Imagens não são texto: o Git não mexe nelas.
+*.webp binary
+*.png binary

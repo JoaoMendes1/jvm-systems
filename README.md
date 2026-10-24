@@ -3,7 +3,7 @@
 Portfólio com os projetos que construí e mantenho no ar — com as decisões que tomei, o que deu
 errado e o que aprendi.
 
-**Endereço:** `https://joaomendes.dev.br` *(ainda não publicado — ver Fase 1 do [`docs/ROADMAP.md`](docs/ROADMAP.md))*
+**Endereço:** `https://joaomendes.dev.br`
 
 ---
 
@@ -36,7 +36,7 @@ src/content/*.mdx  →  build do Astro  →  HTML estático  →  container  →
 
 | Camada | Tecnologia |
 |---|---|
-| Gerador | Astro com MDX *(versões fixadas no scaffold — Fase 1)* |
+| Gerador | Astro com MDX e TypeScript, versões fixadas no `package.json` |
 | Estilo | CSS puro com custom properties — ver [`docs/DESIGN_TOKENS.md`](docs/DESIGN_TOKENS.md) |
 | Conteúdo | Content collections com schema validado no build |
 | Hospedagem | VPS própria: container servindo arquivos estáticos atrás do Caddy |
@@ -49,24 +49,24 @@ src/
 ├── content/
 │   ├── projetos/     ← um .mdx por projeto
 │   └── pilulas/      ← um .mdx por pílula
-├── components/
+├── components/       ← componentes das páginas e do MDX (Decisao, Terminal, Callout)
+├── data/             ← competências da home
 ├── layouts/
-├── pages/
-└── styles/
+├── lib/              ← regras de exibição, datas em UTC e logos da stack
+├── pages/            ← uma rota por arquivo
+└── styles/           ← tokens e estilos globais
+public/               ← capas dos projetos e protótipos publicados
+docker/               ← Caddyfile do container
 docs/                 ← toda a documentação, exceto este README e o AGENTS.md
 prototipos/           ← protótipo visual de referência
 AGENTS.md             ← como trabalhar neste repositório
 README.md
 ```
 
-*Estrutura prevista. Confirmada no scaffold da Fase 1.*
-
 ## Rodar localmente
 
-> Válido depois do scaffold (Fase 1).
-
 ```bash
-npm install
+npm ci
 npm run dev        # servidor de desenvolvimento
 npm run build      # gera o site em dist/
 npm run preview    # serve o dist/ exatamente como em produção

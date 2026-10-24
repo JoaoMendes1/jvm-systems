@@ -10,14 +10,14 @@ mínimo para ser enviado a um recrutador. A Fase 4 em diante é incremento sobre
 
 O critério do corte: **o MVP é o que precisa existir para o link ir no currículo.**
 
-## 📍 Status atual (10/10/2026)
+## 📍 Status atual (24/10/2026)
 
 | Fase | Status |
 |---|---|
 | 1 · Fundação e deploy | ✅ Concluída |
 | 2 · Páginas e conteúdo | ✅ Concluída |
 | 3 · Acabamento e publicação | ✅ Concluída — MVP entregue em 03/10/2026 |
-| 4 · Reposicionamento e estudos de caso | 🚧 Em andamento |
+| 4 · Reposicionamento e estudos de caso | ✅ Concluída |
 | 5 · Pílulas vindas do JVM Console | 🕐 Planejada |
 
 ---
@@ -34,8 +34,8 @@ O critério do corte: **o MVP é o que precisa existir para o link ir no curríc
 - [x] Criar o repositório público `jvm-systems` no GitHub, com as branches `main` e `staging`.
 - [x] Protótipo em `prototipos/vitrine-v4.html` — a v3 sem o que não existe (serviços, domínios,
       contagens e hospedagem inventados) e com textos simplificados. A v3 não entra no repositório.
-- [x] **Verificar a versão atual do Astro e da integração MDX antes do scaffold** (regra 10 do
-      `AGENTS.md`). Fixadas sem `^`: Astro 7.3.5, `@astrojs/mdx` 8.0.2, TypeScript 6.0.3. (#1)
+- [x] **Verificar a versão atual do Astro e da integração MDX antes do scaffold** (verificação de
+      dependências do `AGENTS.md`). Fixadas sem `^`: Astro 7.3.5, `@astrojs/mdx` 8.0.2, TypeScript 6.0.3. (#1)
 - [x] Scaffold do Astro com MDX e TypeScript. (#1)
 - [x] Content collections `projetos` e `pilulas`, com o schema do `docs/CONTEUDO.md`. (#4)
 - [x] Tokens do `docs/DESIGN_TOKENS.md` em `src/styles/`, e layout base com as fontes.

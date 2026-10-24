@@ -1,219 +1,177 @@
 # AGENTS.md
 
-> Instruções para qualquer IA (chat ou agente de código) que for trabalhar comigo neste
-> repositório. Se você é uma ferramenta agentic (Claude Code, Cursor, Codex CLI, etc.), leia isso
-> automaticamente antes de qualquer tarefa. Se for um chat que não lê arquivos de repositório
-> sozinho, colei este conteúdo manualmente como primeira mensagem.
-
-## Quem sou eu / como quero trabalhar
-
-Considero-me **iniciante** na maior parte destas stacks — principalmente Go. Construo boa parte
-do código com ajuda de IA, então:
-
-- **Sempre explique o porquê**, não só o quê. Se uma escolha técnica não for óbvia, explique
-  antes de implementar.
-- Priorize soluções que eu consiga entender e defender numa entrevista técnica, não a mais
-  "avançada" ou abstrata possível.
-- Se eu pedir algo que pule uma etapa de entendimento, pode perguntar antes de simplesmente obedecer.
+> Regras para quem trabalha neste repositório, pessoa ou IA. Ferramentas de IA (Claude Code,
+> Cursor, Codex CLI etc.) leem este arquivo antes de qualquer tarefa.
 
 ## Este repositório
 
-**JVM Systems** é o site pessoal e portfólio servido em `joaomendes.dev.br`. É o hub que reúne os
-projetos em produção.
+**JVM Systems** é o site pessoal e portfólio servido em `joaomendes.dev.br`: reúne os
+projetos publicados, cada um com estudo de caso, e as pílulas.
 
-- **Site estático:** Astro com MDX. Não há backend, banco de dados nem requisição de visitante
-  chegando a servidor de aplicação.
-- **Conteúdo é arquivo:** projetos em `src/content/projetos/`, pílulas em `src/content/pilulas/`.
-  O formato é contrato, descrito em `docs/CONTEUDO.md`.
-- **Estilo:** CSS puro com custom properties. Os tokens estão em `docs/DESIGN_TOKENS.md`.
-- **Documentação em `docs/`,** como nos outros projetos. Na raiz ficam só este `AGENTS.md`, que
-  as ferramentas de IA procuram ali, e o `README.md`, que é a porta de entrada do repositório.
-- **Repositório público.** Nada de IP, nome de usuário do servidor, conteúdo de `.env`, regra de
-  firewall ou porta aberta para a internet entra aqui — nem em documentação, nem em comentário.
-  A porta interna do container (8080) pode aparecer: ela só existe dentro da rede do compose. A
-  configuração do servidor vive no repositório privado `infra`.
+- **Endereço:** `https://joaomendes.dev.br`
+- **Stack:** Astro 7 com MDX e TypeScript · CSS puro com custom properties · arquivos
+  estáticos servidos por um Caddy interno, em container. Sem backend e sem banco.
+- **Documentação em `docs/`.** Na raiz ficam só este `AGENTS.md`, que as ferramentas de IA
+  procuram ali, e o `README.md`, a porta de entrada do repositório.
+- **Repositório público.** Nada de IP, nome de usuário do servidor, conteúdo de `.env`, regra
+  de firewall ou porta aberta para a internet entra aqui, nem em documentação, nem em
+  comentário. A porta interna do container (8080) pode aparecer: só existe na rede do compose.
+- **A infraestrutura do servidor é mantida no repositório privado `infra`:** compose de
+  produção e proxy. DNS e backup também ficam fora daqui. Quando uma mudança exigir algo no
+  servidor, indique o que precisa mudar lá.
 
-**Regra de conteúdo, específica deste projeto:** o site não afirma nada que não exista.
+## Regras deste projeto
 
-- Serviço só aparece como "no ar" se estiver no ar.
-- Projeto só ganha card se tiver repositório.
-- Contagem exibida (projetos, pílulas, tempo de leitura) é calculada no build, nunca escrita à mão.
+Valem só aqui. Cada uma com o motivo, para não ser quebrada sem saber o custo.
 
-Este é um portfólio: cada frase dele pode virar pergunta numa entrevista.
+- **O site não afirma nada que não exista.** Serviço só aparece como "no ar" se estiver no
+  ar; projeto só ganha card se tiver repositório; contagem exibida é calculada no build, nunca
+  escrita à mão. Num portfólio, cada frase pode virar pergunta de entrevista.
+- **Estudo de caso acompanha o repositório do projeto.** Antes de escrever ou mudar um,
+  confira o código e os documentos daquele repositório.
+- **Conteúdo é arquivo, e o formato é contrato.** Projetos e pílulas são `.mdx` em
+  `src/content/`, validados pelo schema de `src/content.config.ts` e explicados no
+  `docs/CONTEUDO.md`. Se o código e o documento divergirem, vale o código.
+- **Sem ambiente de homologação:** `npm run build` e `npm run preview` servem os mesmos
+  arquivos de produção. O preview não reproduz o Caddy (cabeçalhos, redirecionamentos):
+  mudança no `docker/Caddyfile` é validada direto em produção.
+- **O build é o teste principal.** O CI roda `astro check` e `npm run build` a cada push na
+  `staging`: é ali que o frontmatter de cada arquivo é validado.
+- **As armadilhas ficam no `docs/CONTEUDO.md`,** porque todas as que existem são de conteúdo.
+  O `docs/PITFALLS.md` nasce na primeira falha silenciosa de código.
+- **Sem `@types/node`:** nenhum `node:fs` nem outra API do Node em arquivo checado pelo
+  `astro check`.
+- **O build precisa de internet:** as fontes vêm pela Fonts API do Astro e são baixadas no
+  build.
+- **Texto com `: ` no frontmatter vai entre aspas:** o YAML lê o resto como campo novo e o
+  build quebra.
+- **O aviso `MODULE_LEVEL_DIRECTIVE` no build é esperado:** vem do Rolldown, sobre uma
+  marcação interna do Astro nos `.mdx`, e não indica erro.
+- **Protótipos publicados ficam em `public/prototipos/<projeto>/`,** com `noindex`, aviso de
+  dados fictícios e sem fonte externa.
+- **O site não manda cabeçalho de CSP** (conferido em 10/10/2026).
+- **Projeto novo no portfólio** usa nome provisório claro ("Nome (nome provisório)") até o
+  nome definitivo, e entra no site só pelo arquivo em `src/content/projetos/`.
+
+## Lições de outros projetos que valem aqui
+
+- **No servidor, nenhum container publica porta com `ports`.** O proxy alcança o container
+  pela rede interna (`expose`); porta publicada fica aberta mesmo sem regra no firewall.
+- **Fim de linha LF em todos os arquivos**, pelo `.gitattributes`. `Dockerfile` ou
+  `Caddyfile` com CRLF quebra no container Linux com um erro que não aponta a causa.
+- **Texto de fora nunca vira HTML sem sanitização.** HTML permitido só por lista fechada, com
+  biblioteca de sanitização, nunca com regex própria. Vale para as pílulas que virão do
+  JVM Console.
+- **Segredo fica fora do build público.** O token que o build usar para falar com o
+  JVM Console é secret do repositório, nunca variável embutida no site.
 
 ## Fluxo de trabalho obrigatório
 
-1. **Toda alteração nasce de uma Issue** no GitHub Projects, escrita **antes** de qualquer código,
-   neste formato exato:
+1. **Toda alteração com decisão nasce de uma issue**, escrita antes do código, por um dos
+   modelos em `.github/ISSUE_TEMPLATE/`: **Funcionalidade** ou **Bug**. A issue é
+   obrigatória quando a alteração:
+   - muda o schema de um jeito que pode quebrar ou mudar conteúdo já escrito: campo
+     obrigatório novo, campo ou tag renomeados ou removidos, regra de exibição;
+   - corrige bug, de qualquer tamanho: a causa é o que mais ensina, e some se não for escrita;
+   - envolve escolha estrutural: biblioteca nova, design tokens, navegação, padrão de
+     componente;
+   - muda como o site é construído ou publicado: `Dockerfile`, `docker/Caddyfile`, CI, deploy.
 
-```markdown
-Título: <tipo>: <descrição curta> #<número>
+   Dispensam issue: pílula, estudo de caso, tag nova (é aditiva e não quebra nenhum arquivo),
+   texto de interface, ajuste visual dentro dos tokens, documentação, configuração do
+   repositório, refatoração sem mudança de comportamento e atualização de dependência sem
+   mudança de código (`chore(deps)`). Na dúvida: daqui a três meses, alguém vai perguntar
+   "por que foi feito assim?"? Se sim, abre issue.
 
-**🏷️ Labels:** `label1`, `label2`
+2. **Toda alteração entra primeiro na branch `staging`**, nunca direto na `main`. A `main` é
+   a versão publicada: o push nela dispara o deploy. Só se promove com o CI verde.
 
-### 🎯 Objetivo
-[Descrição clara do problema/funcionalidade]
+3. **Commits:** `tipo(escopo): descrição curta (closes #NN)`. Tipos: `feat`, `fix`,
+   `refactor`, `docs`, `chore`. Escopos usados aqui: `ui`, `pilulas`, `projetos`, `infra` e
+   `deps`. Pílula e estudo de caso novos usam `docs(pilulas)` e `docs(projetos)`. O
+   `closes #NN` só fecha a issue quando o commit chega à `main`.
 
-### 📋 Tarefas
-- [ ] Passo técnico 1
-- [ ] Passo técnico 2
+**Labels:** catálogo do `modelo-projeto`, nome em inglês e descrição em português. Toda issue
+recebe um tipo e uma ou mais áreas. Os modelos de issue aplicam `feature` e `bug` pelo nome
+exato: renomear uma delas faz o modelo deixar de aplicá-la, sem erro.
 
-### ✅ Critérios de Aceite
-- [ ] Condição verificável de que está pronto
-- [ ] Conferido no `npm run preview`
-```
-> **Emenda (25/08/2026):** issue é obrigatória quando a alteração:
-> - mexe em **schema, dado de usuário, autenticação ou regra de negócio**;
-> - é **correção de bug**, qualquer que seja o tamanho — bug pequeno costuma ter
->   causa interessante, e é ela que some se não for escrita;
-> - envolve **escolha estrutural no visual**: trocar biblioteca, alterar design
->   tokens, refazer navegação ou padrão de componente. Não pela quantidade de
->   código, mas porque existe um "por quê" que precisa ficar registrado.
->
-> Dispensam issue: texto de interface, ajuste visual dentro dos tokens já
-> existentes, documentação e refatoração sem mudança de comportamento. Nesses
-> casos, commit direto na `staging` basta.
->
-> **Na dúvida, o teste:** daqui a três meses, alguém (inclusive eu) vai perguntar
-> "por que foi feito assim?". Se sim, abre issue.
->
-> O critério é o rastro: issue existe para registrar investigação, decisão e como
-> foi verificado. Onde não há decisão a registrar, ela é burocracia.
->
-> **Neste repositório:** pílula, estudo de caso e **tag nova** dispensam issue — tag nova é
-> aditiva e não quebra nenhum arquivo existente. Exige issue a mudança de **schema** que pode
-> quebrar ou mudar conteúdo já escrito: campo obrigatório novo, campo ou tag renomeados ou
-> removidos, regra de exibição. É o contrato que o painel futuro vai seguir.
+| Grupo | Labels |
+|---|---|
+| Tipo | `feature`, `enhancement`, `bug`, `security`, `refactor`, `documentation`, `chore`, `decision` |
+| Área | `backend`, `frontend`, `database`, `auth`, `infra`, `integration`, `ai`, `mobile`, `ui/ux` |
 
-2. **Toda alteração é feita primeiro na branch `staging`**, nunca direto em produção.
+**Quadro** (GitHub Projects): **Todo → In Progress → Staging Done → Done**.
 
-3. **Commits seguem este padrão:**
-```
-tipo(escopo): descrição curta (closes #NN)
-```
-Exemplo: `fix(ui): sanitiza dados de usuário e elimina XSS em termos/categorias (closes #46)`
-
-### Fluxo de comandos Git (sequência completa)
+- A issue nova entra sozinha em Todo, pelo auto-add; a fechada vai sozinha para Done.
+- A passagem para Staging Done é manual: o `closes` só age na `main`.
+- Nunca arraste um cartão para Done à mão: isso fecha a issue antes de o código chegar à
+  `main`.
 
 ```bash
-# 1. Garantir que a staging local está atualizada
+# 1. Staging local atualizada
 git checkout staging
 git pull origin staging
 
-# 2. Fazer as alterações no código
-# (edição normal de arquivos)
+# 2. Conferir o site como vai para produção
+npm run build && npm run preview
 
-# 3. Conferir o que mudou antes de commitar
-git status
-git diff
+# 3. Preparar e conferir, numa passada só, o que vai entrar no commit
+git add -A && git status && git --no-pager diff --cached -M
 
-# 4. Adicionar e commitar no padrão do projeto
-git add <arquivos alterados>
+# 4. Commitar e subir para a staging (dispara o CI)
 git commit -m "tipo(escopo): descrição curta (closes #NN)"
-
-# 5. Subir para staging
 git push origin staging
 
-# 6. Validar antes de qualquer promoção (ver a nota abaixo)
-npm run build
-npm run preview
-
-# 7. Quando validado, promover para produção
+# 5. Com o CI verde: promover (dispara o deploy) e voltar à staging
 git checkout main
 git pull origin main
-git merge staging
-git push origin main   # ← dispara a GitHub Action que publica na VPS
+git merge staging --no-edit
+git push origin main
+git checkout staging
 ```
 
-> **Não existe ambiente de homologação neste repositório, por decisão.** O site é estático: o
-> `npm run preview` serve exatamente os arquivos que vão para produção. O que o preview não
-> reproduz é a camada do Caddy (cabeçalhos, redirecionamentos). Ver `docs/DECISIONS.md`.
->
-> **Verde na Action não garante código novo.** Ela reporta sucesso mesmo quando o `git pull` não
-> trouxe nada. Antes de acusar o deploy, confira se o commit esperado está na `main` do GitHub
-> e no `git log` do servidor.
+- `--no-edit` evita que o merge abra o Vim.
+- **Revert sempre pelo código do commit** (`git revert a1b2c3d`), nunca por `HEAD`.
+- **Action verde não garante código novo.** Antes de acusar o deploy, confira o commit na
+  `main` do GitHub e no `git log --oneline -3` do servidor.
+- **Em mais de uma máquina:** push antes de sair de uma, pull antes de começar na outra.
 
-**Tipos de commit usados:** `feat`, `fix`, `refactor`, `docs`, `chore` — seguido do escopo entre
-parênteses (`ui`, `conteudo`, `deploy`, etc.) e sempre referenciando a issue com `closes #NN`
-quando houver issue. Pílula e estudo de caso novos usam `docs(pilulas)` e `docs(projetos)`.
+## Regras de código
 
-4. **Comentários de código** explicam o quê **e** por quê. Não referenciar número de issue
-   (`#43`) dentro do código-fonte — isso fica só na issue e no commit, a menos que o contexto
-   histórico seja realmente necessário para entender uma decisão não óbvia.
+Prefira a solução simples e defensável à mais abstrata: todo código daqui precisa poder ser
+explicado, linha por linha, por quem o mantém.
 
-5. **Segurança não é uma fase separada.** Qualquer funcionalidade que lide com input de usuário,
-   autenticação ou dados sensíveis já nasce com sanitização/validação — não se deixa para depois.
+4. **Comentários explicam o quê e o porquê**, em tom formal e impessoal, numa linha sempre
+   que possível, e só onde o porquê não é óbvio. Número de issue não entra no código.
 
-6. **Todo planejamento vive no `docs/ROADMAP.md`**, organizado por fases
-   numeradas cronologicamente. Se uma fase revelar dívida técnica ou requisito novo, a correção
-   vira uma fase intermediária (ex: Fase 3.5), inserida entre as duas fases que a originaram —
-   nunca empilhada no final. O roadmap também deve marcar claramente **onde está o MVP**
-   (o corte mínimo publicável) e diferenciar isso de melhorias posteriores.
+5. **Segurança não é uma fase separada.** Texto vindo de fora e dado sensível já nascem com
+   sanitização e validação.
 
-   **A cada entrega, atualizar o roadmap no mesmo push:** marcar os itens concluídos com `[x]`
-   (e o número da issue, quando houver) e ajustar a tabela "Status atual". Se a entrega
-   implementou uma página, atualizar também o `docs/PAGES.md` (status e coluna `Arquivo`).
+6. **Verificação de dependências.** Antes de propor pacote, integração do Astro ou versão de
+   Action, confira se é a versão atual e mantida. Pacote obsoleto ou em fim de vida não
+   entra. Sem certeza, pesquise antes de gerar o código.
 
-6.1. **Um `docs/PAGES.md` complementa o roadmap**, rastreando status por página/tela em vez de por
-   fase — colunas: nome da página, status (⏳ só planejada / ⏳ só preview / ✅ prototipada /
-   implementada), e a fase do roadmap correspondente. Atualizar sempre que uma tela ganhar
-   protótipo visual novo. Ao planejar telas, unificar as que não justificam página própria
-   (ex: Configurações + Ajuda numa só) em vez de multiplicar páginas por padrão.
+7. **Suspeita não é achado.** Não aponte problema sem o arquivo na mão. Peça o arquivo, ou o
+   `grep` que localiza os pontos de uso, e só então conclua.
 
-7. **CI automatizado no push para `staging`.** Um workflow do GitHub Actions roda `astro check`
-   e `npm run build` a cada push nessa branch. O build é o teste mais importante deste projeto:
-   é nele que o schema do conteúdo é validado, então frontmatter errado quebra o CI em vez de
-   chegar ao site. Se quebrar, corrige antes de promover para `main`. Configura uma vez, roda
-   sozinho depois.
+8. **Revisão antes do commit** em mudança não trivial (feature nova, schema, regra de
+   exibição): a saída de `git diff --cached` é lida antes do commit.
 
-8. **Decisões técnicas estruturais vão para `docs/DECISIONS.md`** (não no
-   `docs/ROADMAP.md`, para não duplicar). Formato de cada entrada:
-   `Data | Decisão | Por que escolhemos A em vez de B`. Só decisões que mudam arquitetura,
-   framework, banco de dados ou fluxo de auth entram lá — não é log de todo commit.
+## Regras de documentação
 
-9. **Code review pré-commit — recomendado, não obrigatório em tudo.** Para mudanças não-triviais
-   (nova feature, lógica de autenticação, algo que mexe em dado sensível), colar a saída de
-   `git diff` no chat antes de commitar, pra eu revisar como um code reviewer (lógica idiomática,
-   segurança, legibilidade) antes do commit. Para ajustes pequenos (texto, estilo, correção
-   simples), não é necessário parar o fluxo pra isso — o objetivo é ganhar prática de revisão
-   real sem travar o ritmo do dia a dia.
+9. **Um fato, um lugar.** Nada é copiado de um documento para outro; um aponta para o outro.
 
-10. **Verificação Cronológica de Dependências (Anti-Legacy):**
-    Antes de propor a importação de qualquer SDK, pacote externo ou API, você deve **obrigatoriamente cruzar a sua resposta com a linha do tempo atual do projeto**.
-    Não confie em dados de treinamento defasados. É terminantemente proibido introduzir pacotes obsoletos (deprecated), legados ou em End-of-Life (EOL). Se o ecossistema da ferramenta sofreu unificações ou mudanças estruturais recentes, exija e utilize a versão moderna e oficial. Se não tiver certeza absoluta do pacote atual, avise ou faça uma pesquisa antes de gerar o código.
+   | Arquivo | O que mora nele |
+   |---|---|
+   | `docs/ROADMAP.md` | Escopo: fases, MVP, backlog. A cada entrega, no mesmo push: itens marcados com `[x]` e a issue, e a tabela de status |
+   | `docs/DECISIONS.md` | Decisões estruturais, com o porquê e o custo aceito. Não é log de commit |
+   | `docs/CONTEUDO.md` | Contrato do conteúdo, tom dos textos e armadilhas conhecidas |
+   | `docs/DESIGN_TOKENS.md` | Cores, tipografia e padrões de componente |
+   | `docs/PAGES.md` | Estado de cada página. Página implementada recebe o caminho em `src/pages/` |
 
-11. **Armadilhas conhecidas.** Este repositório ainda **não tem** `docs/PITFALLS.md`: ele nasce
-    no primeiro bug silencioso que chegar a produção (o que não quebra, só entrega errado), no
-    mesmo formato do AniDeck — sintoma real, causa e pergunta obrigatória. Até lá, as armadilhas
-    já conhecidas de conteúdo estão em `docs/CONTEUDO.md`, na seção de armadilhas. Se a tarefa
-    toca a área de uma delas, responda a pergunta dela explicitamente na resposta, com o arquivo
-    real na mão — não de memória.
+10. **Fase nova não vai para o fim da fila.** Dívida ou requisito descoberto no caminho vira
+    fase intermediária (ex.: 3.5), entre as duas que a originaram. Conteúdo novo (pílula,
+    estudo de caso) não é fase: é fluxo contínuo.
 
-12. **Suspeita não é achado.** Não aponte problema sem o arquivo na mão. Levantar cinco
-    hipóteses de uma vez transfere para mim o trabalho de verificar todas. Peça o arquivo, ou o
-    `grep` que localiza os pontos de uso, e só então conclua.
-
-13. **Edição por trecho (Ctrl+F).** Ao pedir alteração num arquivo que já existe:
-    - informar o arquivo e se o passo é no **editor** ou no **terminal**;
-    - mostrar o **trecho atual completo**, copiado do arquivo, para eu localizar com Ctrl+F —
-      nunca número de linha, e nunca um fragmento que apareça mais de uma vez no arquivo;
-    - em seguida, mostrar o **trecho novo completo**, que substitui o anterior;
-    - se for inserção, dizer se o trecho novo entra **antes** ou **depois** do trecho localizado.
-
-    Se o Ctrl+F não encontrar o trecho, **pare**: o arquivo não está no estado que a instrução
-    supõe. Número de linha muda a cada edição anterior; o trecho completo, além de localizar,
-    prova que quem escreveu a instrução estava olhando o arquivo atual e não a memória dele.
-
-## Tom da conversa
-
-Prefiro uma conversa natural com a IA, não uma troca robotizada de comandos. Pode explicar,
-sugerir, discordar ou perguntar — o fluxo abaixo é sobre *processo* (como o código chega no
-repositório), não sobre como a conversa deve soar.
-
-## Convenções de nomenclatura do meu portfólio
-
-Meus projetos vivem sob o hub **"JVM Systems — Portfolio Dev"**, que reúne todos os meus
-projetos em produção como "módulos". **Este repositório é o próprio hub.** Ao criar um projeto
-novo destinado a ele, use nome provisório claro (ex: "NomeDoProjeto (nome provisório)") até eu
-confirmar o nome definitivo — e o projeto só entra no site pelo arquivo em
-`src/content/projetos/`, seguindo as regras de exibição do `docs/CONTEUDO.md`.
+11. **Armadilha conhecida tem pergunta obrigatória.** Tarefa que toca a área de uma armadilha
+    do `docs/CONTEUDO.md` responde a pergunta dela, com o arquivo real na mão.
