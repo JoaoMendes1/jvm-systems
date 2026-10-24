@@ -15,6 +15,7 @@ export interface Competencia {
 
 const ANIDECK: Prova = { projeto: 'anideck' };
 const GRIMOIRE: Prova = { projeto: 'grimoire' };
+const JVM_CONSOLE: Prova = { projeto: 'jvm-console' };
 const ESTE_SITE: Prova = { rotulo: 'este site', href: 'https://github.com/JoaoMendes1/jvm-systems' };
 
 export const COMPETENCIAS: Competencia[] = [
@@ -46,7 +47,8 @@ export const COMPETENCIAS: Competencia[] = [
     area: 'Infra e processo',
     itens: [
       { texto: 'VPS Linux, Docker e Caddy com HTTPS automático', provas: [ANIDECK, GRIMOIRE, ESTE_SITE] },
-      { texto: 'CI/CD com GitHub Actions: deploy a cada push', provas: [ANIDECK, GRIMOIRE, ESTE_SITE] },
+      { texto: 'Deploy automático com GitHub Actions a cada push na main', provas: [ANIDECK, GRIMOIRE, ESTE_SITE] },
+      { texto: 'CI com GitHub Actions: build e checagem de tipos a cada push na staging', provas: [JVM_CONSOLE, ESTE_SITE] },
       { texto: 'Git com staging e main, issues e decisões documentadas', provas: [ANIDECK, GRIMOIRE, ESTE_SITE] },
     ],
   },

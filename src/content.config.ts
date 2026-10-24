@@ -4,7 +4,7 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // Lista fechada: tag digitada errado quebra o build em vez de criar uma
-// categoria nova com uma pílula só. Tag nova muda o contrato e pede issue.
+// categoria nova com uma pílula só. Como mudar a lista: docs/CONTEUDO.md.
 const TAGS = ['infra', 'go', 'banco', 'deploy', 'frontend', 'seguranca', 'ia'] as const;
 
 // Só https, para o site nunca apontar para um endereço sem certificado.

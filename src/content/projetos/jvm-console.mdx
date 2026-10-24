@@ -1,13 +1,13 @@
 ---
 nome: JVM Console
-resumo: "Meu painel de controle pessoal, para anotar o que estudo e publicar as pílulas deste site. Em planejamento: existem o protótipo navegável e a documentação, ainda não o código."
+resumo: "Meu painel de controle pessoal, para anotar o que estudo e publicar as pílulas deste site. Em construção: existem o protótipo navegável, a documentação e o esqueleto do servidor, ainda sem nenhuma funcionalidade."
 status: em-construcao
 repo: https://github.com/JoaoMendes1/jvm-console
 stack: [Node.js, Fastify, TypeScript, PostgreSQL, React]
 papel: projeto pessoal
 visual: violeta
 ordem: 3
-fase: planejamento, ainda sem código
+fase: "fase 1: esqueleto e CI"
 capa: /projetos/jvm-console.webp
 capaAlt: Protótipo do JVM Console mostrando o editor de nota, com a barra de formatação e o texto em Markdown à esquerda e a prévia à direita.
 ---
@@ -18,7 +18,7 @@ Hoje, para publicar uma pílula aqui, eu escrevo um arquivo `.mdx` à mão no re
 
 O JVM Console junta as duas coisas: é o caderno onde eu anoto o que estudo, e o lugar de onde publico no site o que vale mostrar, com um botão. Em fases seguintes, ele também deve reunir as visitas dos meus sites e o estado de cada projeto.
 
-**Está em planejamento.** O que existe hoje é o protótipo navegável e a documentação no repositório: decisões, arquitetura e roadmap. O código ainda não começou.
+**Está em construção, na Fase 1.** O que existe hoje é o protótipo navegável, a documentação no repositório (decisões, arquitetura e roadmap) e o esqueleto do servidor, com o CI rodando a cada push na `staging`. Nenhuma funcionalidade está pronta, e ele ainda não está no ar.
 
 <Callout>**Para ver como ele vai ser:** abra o [protótipo navegável](/prototipos/jvm-console/), com dados fictícios. Entre como dono ou como convidado, abra uma nota e teste a barra de formatação e o botão Organizar.</Callout>
 
@@ -85,9 +85,13 @@ Tudo planejado, nada no ar:
   custo="Os tipos das linhas são escritos à mão, e nenhuma consulta pode colar valor dentro do texto do SQL."
 />
 
-## O que ainda não existe
+## O que existe e o que falta
 
-O primeiro corte, o MVP, é entrar com Google, escrever e buscar notas e publicar pílula neste site. Nada disso está construído. A ordem completa está no roadmap do repositório.
+- **Existe:** o esqueleto do servidor, em Fastify com TypeScript, ainda sem nenhuma funcionalidade, e o CI, que compila o TypeScript e confere os tipos a cada push na `staging`.
+- **Falta:** o MVP inteiro: entrar com Google, escrever e buscar notas e publicar pílula neste site.
+- **Fora do ar:** o deploy fica desligado até o servidor estar pronto para receber o projeto.
+
+A ordem completa está no roadmap do repositório.
 
 - [Roadmap](https://github.com/JoaoMendes1/jvm-console/blob/main/docs/ROADMAP.md): as fases e o que entra em cada uma.
 - [Decisões](https://github.com/JoaoMendes1/jvm-console/blob/main/docs/DECISIONS.md): o porquê de cada escolha, com o custo aceito.
