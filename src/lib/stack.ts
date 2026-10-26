@@ -11,6 +11,9 @@ import {
   siPwa,
   siNodedotjs,
   siFastify,
+  siExpress,
+  siPrisma,
+  siMysql,
   type SimpleIcon,
 } from 'simple-icons';
 
@@ -26,6 +29,9 @@ const LOGOS: Record<string, SimpleIcon> = {
   PWA: siPwa,
   'Node.js': siNodedotjs,
   Fastify: siFastify,
+  Express: siExpress,
+  Prisma: siPrisma,
+  MySQL: siMysql,
 };
 
 // Luminância relativa (fórmula do WCAG), para saber se a cor aparece no fundo escuro.
