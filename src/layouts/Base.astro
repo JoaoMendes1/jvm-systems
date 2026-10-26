@@ -31,7 +31,7 @@ const caminho = Astro.url.pathname.endsWith("/")
 const canonica = new URL(caminho, Astro.site).href;
 
 // O ?v=2 força o LinkedIn a buscar a imagem de novo. Trocou a imagem? Suba o número.
-const imagem = new URL("/og.png?v=2", Astro.site).href;
+const imagem = new URL("/og.png?v=3", Astro.site).href;
 ---
 
 <!doctype html>
